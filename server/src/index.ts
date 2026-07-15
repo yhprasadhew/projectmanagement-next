@@ -22,7 +22,7 @@ const PORT = process.env.PORT || 3000;
 
 {/*Routes */}
 app.get("/", (req,res) => {
-    res.send("hello this homes psd route");
+    res.send("hello this homes psd route");  // hhtp check kra blnna
 })
 
 const port = process.env.PORT || 3000;
