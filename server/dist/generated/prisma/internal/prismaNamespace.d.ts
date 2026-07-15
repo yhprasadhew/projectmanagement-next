@@ -180,9 +180,9 @@ type _Record<K extends keyof any, T> = {
 type NoExpand<T> = T extends unknown ? T : never;
 export type AtLeast<O extends object, K extends string> = NoExpand<O extends unknown ? (K extends keyof O ? {
     [P in K]: O[P];
-} & O : O) | ({
+} & O : O) | {
     [P in keyof O as P extends K ? P : never]-?: O[P];
-} & O) : never>;
+} & O : never>;
 type _Strict<U, _U = U> = U extends unknown ? U & OptionalFlat<_Record<Exclude<Keys<_U>, keyof U>, never>> : never;
 export type Strict<U extends object> = ComputeRaw<_Strict<U>>;
 /** End Helper Types for "Merge" **/
@@ -231,14 +231,14 @@ export type ExcludeUnderscoreKeys<T extends string> = T extends `_${string}` ? n
 export type FieldRef<Model, FieldType> = runtime.FieldRef<Model, FieldType>;
 type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRef<Model, FieldType>;
 export declare const ModelName: {
-    readonly Team: 'Team';
-    readonly Project: 'Project';
-    readonly ProjectTeam: 'ProjectTeam';
-    readonly User: 'User';
-    readonly Task: 'Task';
-    readonly Attachment: 'Attachment';
-    readonly Comment: 'Comment';
-    readonly TaskAssignment: 'TaskAssignment';
+    readonly Team: "Team";
+    readonly Project: "Project";
+    readonly ProjectTeam: "ProjectTeam";
+    readonly User: "User";
+    readonly Task: "Task";
+    readonly Attachment: "Attachment";
+    readonly Comment: "Comment";
+    readonly TaskAssignment: "TaskAssignment";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export interface TypeMapCb<GlobalOmitOptions = {}> extends runtime.Types.Utils.Fn<{
@@ -875,103 +875,103 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
  * Enums
  */
 export declare const TransactionIsolationLevel: {
-    readonly ReadUncommitted: 'ReadUncommitted';
-    readonly ReadCommitted: 'ReadCommitted';
-    readonly RepeatableRead: 'RepeatableRead';
-    readonly Serializable: 'Serializable';
+    readonly ReadUncommitted: "ReadUncommitted";
+    readonly ReadCommitted: "ReadCommitted";
+    readonly RepeatableRead: "RepeatableRead";
+    readonly Serializable: "Serializable";
 };
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel];
 export declare const TeamScalarFieldEnum: {
-    readonly id: 'id';
-    readonly teamName: 'teamName';
-    readonly productOwnerUserId: 'productOwnerUserId';
-    readonly projectManagerUserId: 'projectManagerUserId';
-    readonly createdAt: 'createdAt';
-    readonly updatedAt: 'updatedAt';
+    readonly id: "id";
+    readonly teamName: "teamName";
+    readonly productOwnerUserId: "productOwnerUserId";
+    readonly projectManagerUserId: "projectManagerUserId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum];
 export declare const ProjectScalarFieldEnum: {
-    readonly id: 'id';
-    readonly name: 'name';
-    readonly description: 'description';
-    readonly startDate: 'startDate';
-    readonly endDate: 'endDate';
-    readonly createdAt: 'createdAt';
-    readonly updatedAt: 'updatedAt';
+    readonly id: "id";
+    readonly name: "name";
+    readonly description: "description";
+    readonly startDate: "startDate";
+    readonly endDate: "endDate";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum];
 export declare const ProjectTeamScalarFieldEnum: {
-    readonly id: 'id';
-    readonly teamId: 'teamId';
-    readonly projectId: 'projectId';
+    readonly id: "id";
+    readonly teamId: "teamId";
+    readonly projectId: "projectId";
 };
 export type ProjectTeamScalarFieldEnum = (typeof ProjectTeamScalarFieldEnum)[keyof typeof ProjectTeamScalarFieldEnum];
 export declare const UserScalarFieldEnum: {
-    readonly id: 'id';
-    readonly cognitoId: 'cognitoId';
-    readonly username: 'username';
-    readonly profilePictureUrl: 'profilePictureUrl';
-    readonly teamId: 'teamId';
-    readonly createdAt: 'createdAt';
-    readonly updatedAt: 'updatedAt';
+    readonly id: "id";
+    readonly cognitoId: "cognitoId";
+    readonly username: "username";
+    readonly profilePictureUrl: "profilePictureUrl";
+    readonly teamId: "teamId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum];
 export declare const TaskScalarFieldEnum: {
-    readonly id: 'id';
-    readonly title: 'title';
-    readonly description: 'description';
-    readonly status: 'status';
-    readonly priority: 'priority';
-    readonly tags: 'tags';
-    readonly startDate: 'startDate';
-    readonly dueDate: 'dueDate';
-    readonly projectId: 'projectId';
-    readonly authorUserId: 'authorUserId';
-    readonly assignedUserId: 'assignedUserId';
-    readonly createdAt: 'createdAt';
-    readonly updatedAt: 'updatedAt';
+    readonly id: "id";
+    readonly title: "title";
+    readonly description: "description";
+    readonly status: "status";
+    readonly priority: "priority";
+    readonly tags: "tags";
+    readonly startDate: "startDate";
+    readonly dueDate: "dueDate";
+    readonly projectId: "projectId";
+    readonly authorUserId: "authorUserId";
+    readonly assignedUserId: "assignedUserId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type TaskScalarFieldEnum = (typeof TaskScalarFieldEnum)[keyof typeof TaskScalarFieldEnum];
 export declare const AttachmentScalarFieldEnum: {
-    readonly id: 'id';
-    readonly fileURL: 'fileURL';
-    readonly fileName: 'fileName';
-    readonly taskId: 'taskId';
-    readonly uploadedById: 'uploadedById';
-    readonly createdAt: 'createdAt';
-    readonly updatedAt: 'updatedAt';
+    readonly id: "id";
+    readonly fileURL: "fileURL";
+    readonly fileName: "fileName";
+    readonly taskId: "taskId";
+    readonly uploadedById: "uploadedById";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type AttachmentScalarFieldEnum = (typeof AttachmentScalarFieldEnum)[keyof typeof AttachmentScalarFieldEnum];
 export declare const CommentScalarFieldEnum: {
-    readonly id: 'id';
-    readonly text: 'text';
-    readonly taskId: 'taskId';
-    readonly userId: 'userId';
-    readonly createdAt: 'createdAt';
-    readonly updatedAt: 'updatedAt';
+    readonly id: "id";
+    readonly text: "text";
+    readonly taskId: "taskId";
+    readonly userId: "userId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type CommentScalarFieldEnum = (typeof CommentScalarFieldEnum)[keyof typeof CommentScalarFieldEnum];
 export declare const TaskAssignmentScalarFieldEnum: {
-    readonly id: 'id';
-    readonly userId: 'userId';
-    readonly taskId: 'taskId';
-    readonly createdAt: 'createdAt';
-    readonly updatedAt: 'updatedAt';
+    readonly id: "id";
+    readonly userId: "userId";
+    readonly taskId: "taskId";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
 };
 export type TaskAssignmentScalarFieldEnum = (typeof TaskAssignmentScalarFieldEnum)[keyof typeof TaskAssignmentScalarFieldEnum];
 export declare const SortOrder: {
-    readonly asc: 'asc';
-    readonly desc: 'desc';
+    readonly asc: "asc";
+    readonly desc: "desc";
 };
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder];
 export declare const QueryMode: {
-    readonly default: 'default';
-    readonly insensitive: 'insensitive';
+    readonly default: "default";
+    readonly insensitive: "insensitive";
 };
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode];
 export declare const NullsOrder: {
-    readonly first: 'first';
-    readonly last: 'last';
+    readonly first: "first";
+    readonly last: "last";
 };
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder];
 /**
