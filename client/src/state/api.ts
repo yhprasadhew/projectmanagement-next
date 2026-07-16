@@ -45,7 +45,7 @@ export interface Task {
   projectId?: number;
   authorUserId?: number;
   assignedUserId?: number;
-  
+
   author?: User;
   assignee?: User;
   comments?: Comment[];
@@ -61,26 +61,66 @@ export interface Team {
 
 export const api = createApi({
   reducerPath: "api",
+
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL ,
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
   }),
+
   tagTypes: ["Projects", "Tasks", "Users", "Teams"],
+
   endpoints: (builder) => ({
+    // =========================
+    // GET PROJECTS
+    // =========================
     getProjects: builder.query<Project[], void>({
       query: () => "projects",
       providesTags: ["Projects"],
     }),
+
+    // =========================
+    // GET TASKS
+    // =========================
     getTasks: builder.query<Task[], { projectId: number }>({
       query: ({ projectId }) => `tasks?projectId=${projectId}`,
+
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "Tasks" as const, id })),
+              ...result.map(({ id }) => ({
+                type: "Tasks" as const,
+                id,
+              })),
               { type: "Tasks", id: "LIST" },
             ]
           : [{ type: "Tasks", id: "LIST" }],
     }),
+
+    // =========================
+    // UPDATE TASK
+    // =========================
+    updateTask: builder.mutation<
+      Task,
+      {
+        taskId: number;
+        body: Partial<Task>;
+      }
+    >({
+      query: ({ taskId, body }) => ({
+        url: `tasks/${taskId}`,
+        method: "PUT", // Change to PATCH if your backend uses PATCH
+        body,
+      }),
+
+      invalidatesTags: (result, error, { taskId }) => [
+        { type: "Tasks", id: taskId },
+        { type: "Tasks", id: "LIST" },
+      ],
+    }),
   }),
 });
 
-export const { useGetProjectsQuery, useGetTasksQuery } = api;
+export const {
+  useGetProjectsQuery,
+  useGetTasksQuery,
+  useUpdateTaskMutation,
+} = api;
