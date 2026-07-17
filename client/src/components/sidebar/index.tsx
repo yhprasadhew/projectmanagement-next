@@ -15,6 +15,8 @@ import {
   ChevronDown,
   ChevronUp,
   Users,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -29,17 +31,7 @@ const Sidebar = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    console.log("Sidebar mounted. API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
   }, []);
-
-  useEffect(() => {
-    if (error) {
-      console.error("Error fetching projects from RTK Query:", error);
-    }
-    if (projects) {
-      console.log("Projects fetched successfully:", projects);
-    }
-  }, [projects, error]);
 
   const sidebarCollapsed = isMounted ? isSidebarCollapsed : false;
 
@@ -70,11 +62,9 @@ const Sidebar = () => {
   return (
     <aside className={sidebarClassNames}>
       <div className="flex h-full flex-col justify-between p-5">
-        <div>
-          {/* ===================== LOGO ===================== */}
+        <div className="flex min-h-0 flex-1 flex-col">
           <div className="mb-8 flex items-center justify-between">
             <Link href="/" className="group flex items-center gap-3">
-              {/* Custom logo mark */}
               <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gray-900 shadow-md ring-1 ring-black/5 transition-transform duration-200 group-hover:scale-105 dark:bg-white">
                 <svg
                   viewBox="0 0 24 24"
@@ -136,7 +126,6 @@ const Sidebar = () => {
             </button>
           </div>
 
-          {/* ===================== NAVIGATION ===================== */}
           <p className="mb-2 px-4 text-[11px] font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
             Menu
           </p>
@@ -169,14 +158,18 @@ const Sidebar = () => {
             })}
           </nav>
 
-          {/* ===================== PROJECTS SECTION ===================== */}
-          <div className="mt-6 border-t border-gray-200 pt-4 dark:border-stroke-dark">
+          <div className="mt-6 flex min-h-0 flex-1 flex-col border-t border-gray-200 pt-4 dark:border-stroke-dark">
             <button
               onClick={() => setShowProjects((prev) => !prev)}
-              className="flex w-full items-center justify-between px-4 py-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+              className="flex w-full shrink-0 items-center justify-between px-4 py-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
             >
-              <span className="text-[11px] font-semibold uppercase tracking-wider">
+              <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider">
                 Projects
+                {projects && (
+                  <span className="rounded-full bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 dark:bg-dark-tertiary dark:text-gray-400">
+                    {projects.length}
+                  </span>
+                )}
               </span>
               {showProjects ? (
                 <ChevronUp className="h-4 w-4" />
@@ -184,8 +177,29 @@ const Sidebar = () => {
                 <ChevronDown className="h-4 w-4" />
               )}
             </button>
+
             {showProjects && (
-              <div className="mt-2 space-y-1">
+              <div className="mt-2 min-h-0 flex-1 space-y-1 overflow-y-auto">
+                {isLoading && (
+                  <div className="flex items-center gap-2 px-4 py-3 text-sm text-gray-400">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Loading projects...
+                  </div>
+                )}
+
+                {error && (
+                  <div className="mx-2 flex items-start gap-2 rounded-lg bg-red-50 p-3 text-xs text-red-600 dark:bg-red-900/20 dark:text-red-400">
+                    <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    <span>Could not load projects. Check API connection.</span>
+                  </div>
+                )}
+
+                {!isLoading && !error && projects?.length === 0 && (
+                  <p className="px-4 py-2 text-xs text-gray-400 dark:text-gray-500">
+                    No projects yet
+                  </p>
+                )}
+
                 {projects?.map((project) => {
                   const projectPath = `/projects/${project.id}`;
                   const isActive = pathname === projectPath;
@@ -216,8 +230,7 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* ===================== FOOTER ===================== */}
-        <div className="border-t border-gray-200 pt-4 dark:border-stroke-dark">
+        <div className="shrink-0 border-t border-gray-200 pt-4 dark:border-stroke-dark">
           <div className="flex items-center gap-3 rounded-lg px-2 py-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-900 text-xs font-semibold text-white dark:bg-white dark:text-gray-900">
               v1

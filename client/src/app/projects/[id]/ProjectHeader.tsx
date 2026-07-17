@@ -11,8 +11,10 @@ import {
   Share2,
   Filter,
 } from "lucide-react";
+import { Project } from "@/state/api";
 
 type Props = {
+  project: Project;
   activeTab: string;
   setActiveTab: (tab: string) => void;
   isModalNewTaskOpen?: boolean;
@@ -28,28 +30,31 @@ const tabs = [
 ];
 
 const ProjectHeader = ({
+  project,
   activeTab,
   setActiveTab,
   setIsModalNewTaskOpen,
 }: Props) => {
   return (
     <div className="mb-6">
-      {/* Top Bar */}
-      <div className="flex items-center justify-between mb-4">
-        {/* Project breadcrumb / title */}
+      <div className="mb-4 flex items-center justify-between">
         <div>
-          <p className="text-xs text-gray-400 dark:text-gray-500 mb-0.5">
+          <p className="mb-0.5 text-xs text-gray-400 dark:text-gray-500">
             Projects
           </p>
           <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-100">
-            Project Details
+            {project.name}
           </h1>
+          {project.description && (
+            <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
+              {project.description}
+            </p>
+          )}
         </div>
 
-        {/* Action Buttons */}
         <div className="flex items-center gap-2">
           <button
-            className="flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-stroke-dark px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-tertiary transition-colors"
+            className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-50 dark:border-stroke-dark dark:text-gray-300 dark:hover:bg-dark-tertiary"
             aria-label="Filter tasks"
           >
             <Filter className="h-4 w-4" />
@@ -57,7 +62,7 @@ const ProjectHeader = ({
           </button>
 
           <button
-            className="flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-stroke-dark px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-tertiary transition-colors"
+            className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-50 dark:border-stroke-dark dark:text-gray-300 dark:hover:bg-dark-tertiary"
             aria-label="Share project"
           >
             <Share2 className="h-4 w-4" />
@@ -65,7 +70,7 @@ const ProjectHeader = ({
           </button>
 
           <button
-            className="flex items-center gap-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 px-3 py-1.5 text-sm font-medium text-white transition-colors shadow-sm"
+            className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
             aria-label="Add new task"
             onClick={() => setIsModalNewTaskOpen?.(true)}
           >
@@ -75,7 +80,6 @@ const ProjectHeader = ({
         </div>
       </div>
 
-      {/* Tabs */}
       <div className="relative border-b border-gray-200 dark:border-stroke-dark">
         <nav className="flex gap-0 overflow-x-auto" aria-label="Project tabs">
           {tabs.map(({ name, icon: Icon }) => {
@@ -84,17 +88,15 @@ const ProjectHeader = ({
               <button
                 key={name}
                 onClick={() => setActiveTab(name)}
-                className={`relative flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-colors duration-150
-                  ${
-                    isActive
-                      ? "text-blue-600 dark:text-blue-400"
-                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
-                  }`}
+                className={`relative flex items-center gap-2 whitespace-nowrap px-4 py-2.5 text-sm font-medium transition-colors duration-150 ${
+                  isActive
+                    ? "text-blue-600 dark:text-blue-400"
+                    : "text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                }`}
                 aria-current={isActive ? "page" : undefined}
               >
                 <Icon className="h-4 w-4" />
                 {name}
-                {/* Active underline */}
                 {isActive && (
                   <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-blue-600 dark:bg-blue-400" />
                 )}

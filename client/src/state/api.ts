@@ -77,6 +77,12 @@ export const api = createApi({
       providesTags: ["Projects"],
     }),
 
+    getProject: builder.query<Project, number>({
+      query: (projectId) => `projects/${projectId}`,
+      providesTags: (result) =>
+        result ? [{ type: "Projects", id: result.id }] : ["Projects"],
+    }),
+
     // =========================
     // GET TASKS
     // =========================
@@ -96,19 +102,19 @@ export const api = createApi({
     }),
 
     // =========================
-    // UPDATE TASK
+    // UPDATE TASK STATUS
     // =========================
-    updateTask: builder.mutation<
+    updateTaskStatus: builder.mutation<
       Task,
       {
         taskId: number;
-        body: Partial<Task>;
+        status: string;
       }
     >({
-      query: ({ taskId, body }) => ({
-        url: `tasks/${taskId}`,
-        method: "PUT", // Change to PATCH if your backend uses PATCH
-        body,
+      query: ({ taskId, status }) => ({
+        url: `tasks/${taskId}/status`,
+        method: "PATCH",
+        body: { status },
       }),
 
       invalidatesTags: (result, error, { taskId }) => [
@@ -121,6 +127,7 @@ export const api = createApi({
 
 export const {
   useGetProjectsQuery,
+  useGetProjectQuery,
   useGetTasksQuery,
-  useUpdateTaskMutation,
+  useUpdateTaskStatusMutation,
 } = api;
