@@ -5,12 +5,16 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "../../app/redux";
 import { setIsSidebarCollapsed } from "@/state";
+import { useGetProjectsQuery } from "@/state/api";
 import {
   X,
   LayoutDashboard,
   Briefcase,
   Settings,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  Users,
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -20,10 +24,22 @@ const Sidebar = () => {
   );
   const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
+  const [showProjects, setShowProjects] = useState(true);
+  const { data: projects, error, isLoading } = useGetProjectsQuery();
 
   useEffect(() => {
     setIsMounted(true);
+    console.log("Sidebar mounted. API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
   }, []);
+
+  useEffect(() => {
+    if (error) {
+      console.error("Error fetching projects from RTK Query:", error);
+    }
+    if (projects) {
+      console.log("Projects fetched successfully:", projects);
+    }
+  }, [projects, error]);
 
   const sidebarCollapsed = isMounted ? isSidebarCollapsed : false;
 
@@ -40,9 +56,9 @@ const Sidebar = () => {
       icon: LayoutDashboard,
     },
     {
-      href: "/projects",
-      label: "Projects",
-      icon: Briefcase,
+      href: "/users",
+      label: "Users",
+      icon: Users,
     },
     {
       href: "/settings",
@@ -152,6 +168,52 @@ const Sidebar = () => {
               );
             })}
           </nav>
+
+          {/* ===================== PROJECTS SECTION ===================== */}
+          <div className="mt-6 border-t border-gray-200 pt-4 dark:border-stroke-dark">
+            <button
+              onClick={() => setShowProjects((prev) => !prev)}
+              className="flex w-full items-center justify-between px-4 py-2 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            >
+              <span className="text-[11px] font-semibold uppercase tracking-wider">
+                Projects
+              </span>
+              {showProjects ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </button>
+            {showProjects && (
+              <div className="mt-2 space-y-1">
+                {projects?.map((project) => {
+                  const projectPath = `/projects/${project.id}`;
+                  const isActive = pathname === projectPath;
+
+                  return (
+                    <Link
+                      key={project.id}
+                      href={projectPath}
+                      className={`group relative flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                        isActive
+                          ? "bg-gray-900 text-white shadow-sm dark:bg-white dark:text-gray-900"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-dark-tertiary dark:hover:text-white"
+                      }`}
+                    >
+                      {isActive && (
+                        <span className="absolute -left-5 h-5 w-1 rounded-r-full bg-gray-900 dark:bg-white" />
+                      )}
+                      <Briefcase className="h-[18px] w-[18px] shrink-0" />
+                      <span className="flex-1 truncate">{project.name}</span>
+                      {isActive && (
+                        <ChevronRight className="h-4 w-4 opacity-70" />
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* ===================== FOOTER ===================== */}
