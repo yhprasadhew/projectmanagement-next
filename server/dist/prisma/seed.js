@@ -111,6 +111,22 @@ async function main() {
         });
     }
     console.log("Updated Team circular references");
+    // 10. Reset identity sequences for all tables that were seeded with explicit IDs
+    console.log("Resetting identity sequences...");
+    const tables = [
+        "Team",
+        "Project",
+        "User",
+        "ProjectTeam",
+        "Task",
+        "Attachment",
+        "Comment",
+        "TaskAssignment",
+    ];
+    for (const table of tables) {
+        await prisma.$executeRawUnsafe(`SELECT setval(pg_get_serial_sequence('"${table}"', 'id'), COALESCE(max(id), 1)) FROM "${table}";`);
+    }
+    console.log("Identity sequences reset successfully");
 }
 main()
     .catch((e) => console.error(e))

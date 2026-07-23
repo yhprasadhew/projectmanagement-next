@@ -52,8 +52,8 @@ export const createProject = async (
       data: {
         name,
         description,
-        startDate,
-        endDate,
+        ...(startDate && { startDate: new Date(startDate) }),
+        ...(endDate && { endDate: new Date(endDate) }),
       },
     });
 

@@ -54,11 +54,11 @@ export const createTask = async (
         status,
         priority,
         tags,
-        startDate,
-        dueDate,
-        projectId,
-        authorUserId,
-        assignedUserId,
+        ...(startDate && { startDate: new Date(startDate) }),
+        ...(dueDate && { dueDate: new Date(dueDate) }),
+        ...(projectId && { projectId: Number(projectId) }),
+        ...(authorUserId && { authorUserId: Number(authorUserId) }),
+        ...(assignedUserId && { assignedUserId: Number(assignedUserId) }),
       },
     });
 
