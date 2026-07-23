@@ -3,8 +3,8 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { Calendar, GripVertical, Tag } from "lucide-react";
-import { Task } from "@/state/api";
+import { Calendar, GripVertical, Tag, Trash2 } from "lucide-react";
+import { Task, useDeleteTaskMutation } from "@/state/api";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -19,6 +19,7 @@ const priorityStyles: Record<string, string> = {
 };
 
 const TaskCard = ({ task }: Props) => {
+  const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: String(task.id),
@@ -47,15 +48,37 @@ const TaskCard = ({ task }: Props) => {
         <h4 className="text-sm font-medium leading-snug text-gray-800 dark:text-gray-100">
           {task.title}
         </h4>
-        <button
-          type="button"
-          className="cursor-grab rounded p-0.5 text-gray-300 opacity-0 transition-opacity hover:text-gray-500 group-hover:opacity-100 active:cursor-grabbing dark:text-gray-600 dark:hover:text-gray-400"
-          aria-label="Drag task"
-          {...listeners}
-          {...attributes}
-        >
-          <GripVertical className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            disabled={isDeleting}
+            onClick={async (e) => {
+              e.stopPropagation();
+              if (confirm("Are you sure you want to delete this task?")) {
+                try {
+                  await deleteTask(task.id).unwrap();
+                } catch (err) {
+                  console.error("Failed to delete task:", err);
+                }
+              }
+            }}
+            className="rounded p-0.5 text-gray-300 opacity-0 transition-all duration-200 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 group-hover:opacity-100 dark:text-gray-600 dark:hover:text-red-400 disabled:opacity-50"
+            aria-label="Delete task"
+            title="Delete Task"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+          
+          <button
+            type="button"
+            className="cursor-grab rounded p-0.5 text-gray-300 opacity-0 transition-opacity hover:text-gray-500 group-hover:opacity-100 active:cursor-grabbing dark:text-gray-600 dark:hover:text-gray-400"
+            aria-label="Drag task"
+            {...listeners}
+            {...attributes}
+          >
+            <GripVertical className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       {task.description && (

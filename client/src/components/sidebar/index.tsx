@@ -11,6 +11,11 @@ import {
   Briefcase,
   Settings,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  AlertCircle,
+  ShieldAlert,
+  AlertTriangle,
 } from "lucide-react";
 import { useGetProjectsQuery } from "@/state/api";
 
@@ -61,7 +66,7 @@ const Sidebar = () => {
   return (
     <aside className={sidebarClassNames}>
       <div className="flex h-full flex-col justify-between p-5">
-        <div>
+        <div className="flex flex-1 flex-col overflow-y-auto pr-1">
           {/* ===================== LOGO ===================== */}
           <div className="mb-8 flex items-center justify-between">
             <Link href="/" className="group flex items-center gap-3">
@@ -159,6 +164,93 @@ const Sidebar = () => {
               );
             })}
           </nav>
+
+          {/* ===================== PROJECTS COLLAPSIBLE ===================== */}
+          <div className="mt-6 border-t border-gray-200 pt-4 dark:border-stroke-dark">
+            <button
+              onClick={() => setShowProjects((prev) => !prev)}
+              className="flex w-full items-center justify-between px-4 py-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              <span className="text-[11px] font-semibold uppercase tracking-wider">
+                Projects
+              </span>
+              {showProjects ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </button>
+
+            {/* ===================== PROJECTS LIST ===================== */}
+            {showProjects && (
+              <div className="mt-2 space-y-1">
+                {project?.map((proj) => {
+                  const isActive = pathname === `/projects/${proj.id}`;
+                  return (
+                    <Link
+                      key={proj.id}
+                      href={`/projects/${proj.id}`}
+                      className={`group relative flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                        isActive
+                          ? "bg-gray-100 text-gray-900 shadow-sm dark:bg-dark-tertiary dark:text-white"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-dark-tertiary dark:hover:text-white"
+                      }`}
+                    >
+                      <Briefcase className="h-[18px] w-[18px] shrink-0 text-gray-400 dark:text-gray-500" />
+                      <span className="flex-1 truncate">{proj.name}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* ===================== PRIORITIES COLLAPSIBLE ===================== */}
+          <div className="mt-4 border-t border-gray-200 pt-4 dark:border-stroke-dark">
+            <button
+              onClick={() => setShowPriority((prev) => !prev)}
+              className="flex w-full items-center justify-between px-4 py-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            >
+              <span className="text-[11px] font-semibold uppercase tracking-wider">
+                Priorities
+              </span>
+              {showPriority ? (
+                <ChevronUp className="h-4 w-4" />
+              ) : (
+                <ChevronDown className="h-4 w-4" />
+              )}
+            </button>
+
+            {/* ===================== PRIORITIES LIST ===================== */}
+            {showPriority && (
+              <div className="mt-2 space-y-1">
+                {[
+                  { label: "Urgent", href: "/priority/urgent", icon: AlertCircle, color: "text-red-500" },
+                  { label: "High", href: "/priority/high", icon: ShieldAlert, color: "text-orange-500" },
+                  { label: "Medium", href: "/priority/medium", icon: AlertTriangle, color: "text-yellow-500" },
+                  { label: "Low", href: "/priority/low", icon: AlertCircle, color: "text-blue-500" },
+                  { label: "Backlog", href: "/priority/backlog", icon: Briefcase, color: "text-purple-500" },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className={`group relative flex items-center gap-3 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
+                        isActive
+                          ? "bg-gray-100 text-gray-900 shadow-sm dark:bg-dark-tertiary dark:text-white"
+                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-dark-tertiary dark:hover:text-white"
+                      }`}
+                    >
+                      <Icon className={`h-[18px] w-[18px] shrink-0 ${item.color}`} />
+                      <span className="flex-1">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* ===================== FOOTER ===================== */}

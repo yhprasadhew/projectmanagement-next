@@ -23,6 +23,7 @@ import {
 } from "@/lib/taskStatus";
 import BoardColumn from "./BoardColumn";
 import TaskCard from "./TaskCard";
+import ModalNewTask from "../ModalNewTask";
 
 type Props = {
   projectId: number;
@@ -32,6 +33,7 @@ const BoardView = ({ projectId }: Props) => {
   const { data: tasks, isLoading, isError } = useGetTasksQuery({ projectId });
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [isModalNewTaskOpen, setIsModalNewTaskOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -113,6 +115,7 @@ const BoardView = ({ projectId }: Props) => {
               accent={column.accent}
               badge={column.badge}
               tasks={tasksByStatus[column.id]}
+              onAddTaskClick={column.id === "Todo" ? () => setIsModalNewTaskOpen(true) : undefined}
             />
           ))}
         </div>
@@ -125,6 +128,12 @@ const BoardView = ({ projectId }: Props) => {
           </div>
         ) : null}
       </DragOverlay>
+
+      <ModalNewTask
+        isOpen={isModalNewTaskOpen}
+        onClose={() => setIsModalNewTaskOpen(false)}
+        projectId={projectId}
+      />
     </DndContext>
   );
 };

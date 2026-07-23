@@ -91,4 +91,37 @@ export const updateTaskStatus = async (
       message: "Error updating task status",
     });
   }
+};
+
+export const deleteTask = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { taskId } = req.params;
+
+  try {
+    const id = Number(taskId);
+
+    // Check if task exists
+    const task = await prisma.task.findUnique({ where: { id } });
+    if (!task) {
+      res.status(404).json({ message: "Task not found" });
+      return;
+    }
+
+    await prisma.taskAssignment.deleteMany({ where: { taskId: id } });
+    await prisma.comment.deleteMany({ where: { taskId: id } });
+    await prisma.attachment.deleteMany({ where: { taskId: id } });
+
+    const deletedTask = await prisma.task.delete({
+      where: { id },
+    });
+
+    res.json({ message: "Task deleted successfully", task: deletedTask });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error deleting task",
+    });
+  }
 };

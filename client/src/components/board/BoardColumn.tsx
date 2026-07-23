@@ -5,6 +5,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { Task } from "@/state/api";
 import { TaskStatus } from "@/lib/taskStatus";
 import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
 import TaskCard from "./TaskCard";
 
 type Props = {
@@ -13,9 +14,10 @@ type Props = {
   accent: string;
   badge: string;
   tasks: Task[];
+  onAddTaskClick?: () => void;
 };
 
-const BoardColumn = ({ id, label, accent, badge, tasks }: Props) => {
+const BoardColumn = ({ id, label, accent, badge, tasks, onAddTaskClick }: Props) => {
   const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
@@ -27,17 +29,28 @@ const BoardColumn = ({ id, label, accent, badge, tasks }: Props) => {
       )}
     >
       <div className="flex items-center justify-between px-4 py-3">
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-          {label}
-        </h3>
-        <span
-          className={cn(
-            "rounded-full px-2 py-0.5 text-xs font-medium",
-            badge
-          )}
-        >
-          {tasks.length}
-        </span>
+        <div className="flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+            {label}
+          </h3>
+          <span
+            className={cn(
+              "rounded-full px-2 py-0.5 text-xs font-medium",
+              badge
+            )}
+          >
+            {tasks.length}
+          </span>
+        </div>
+        {id === "Todo" && onAddTaskClick && (
+          <button
+            onClick={onAddTaskClick}
+            className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 hover:bg-gray-200 hover:text-gray-800 dark:text-gray-400 dark:hover:bg-dark-tertiary dark:hover:text-gray-200 transition-colors"
+            title="Add Task to To Do Column"
+          >
+            <Plus className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       <div

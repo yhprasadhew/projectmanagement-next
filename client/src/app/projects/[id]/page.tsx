@@ -5,6 +5,7 @@ import ProjectHeader from "@/app/projects/[id]/ProjectHeader";
 import BoardView from "@/components/board/BoardView";
 import { useGetProjectQuery } from "@/state/api";
 import { Loader2 } from "lucide-react";
+import ModalNewTask from "@/components/ModalNewTask";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -68,6 +69,12 @@ const Page = ({ params }: Props) => {
           </p>
         </div>
       )}
+
+      <ModalNewTask
+        isOpen={isModalNewTaskOpen}
+        onClose={() => setIsModalNewTaskOpen(false)}
+        projectId={projectId}
+      />
     </div>
   );
 };
