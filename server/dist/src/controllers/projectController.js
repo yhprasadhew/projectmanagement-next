@@ -50,4 +50,49 @@ export const createProject = async (req, res) => {
         });
     }
 };
+export const deleteProject = async (req, res) => {
+    const { projectId } = req.params;
+    try {
+        const id = Number(projectId);
+        // Check if project exists
+        const project = await prisma.project.findUnique({ where: { id } });
+        if (!project) {
+            res.status(404).json({ message: "Project not found" });
+            return;
+        }
+        // Find all tasks of this project to delete their related records
+        const tasks = await prisma.task.findMany({ where: { projectId: id } });
+        const taskIds = tasks.map((t) => t.id);
+        if (taskIds.length > 0) {
+            await prisma.taskAssignment.deleteMany({
+                where: { taskId: { in: taskIds } },
+            });
+            await prisma.comment.deleteMany({
+                where: { taskId: { in: taskIds } },
+            });
+            await prisma.attachment.deleteMany({
+                where: { taskId: { in: taskIds } },
+            });
+        }
+        // Delete tasks of the project
+        await prisma.task.deleteMany({
+            where: { projectId: id },
+        });
+        // Delete project teams
+        await prisma.projectTeam.deleteMany({
+            where: { projectId: id },
+        });
+        // Delete the project
+        const deletedProject = await prisma.project.delete({
+            where: { id },
+        });
+        res.json({ message: "Project deleted successfully", project: deletedProject });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Error deleting project",
+        });
+    }
+};
 //# sourceMappingURL=projectController.js.map

@@ -16,13 +16,16 @@ import {
   AlertCircle,
   ShieldAlert,
   AlertTriangle,
+  Plus,
 } from "lucide-react";
 import { useGetProjectsQuery } from "@/state/api";
+import ModalNewProject from "../ModalNewProject";
 
 const Sidebar = () => {
 
   const[showProjects,setShowProjects]= useState(true);
   const [showPriority ,setShowPriority] = useState(true);
+  const [isModalNewProjectOpen, setIsModalNewProjectOpen] = useState(false);
 
   const { data: project}= useGetProjectsQuery();
   
@@ -167,19 +170,29 @@ const Sidebar = () => {
 
           {/* ===================== PROJECTS COLLAPSIBLE ===================== */}
           <div className="mt-6 border-t border-gray-200 pt-4 dark:border-stroke-dark">
-            <button
-              onClick={() => setShowProjects((prev) => !prev)}
-              className="flex w-full items-center justify-between px-4 py-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            >
-              <span className="text-[11px] font-semibold uppercase tracking-wider">
-                Projects
-              </span>
-              {showProjects ? (
-                <ChevronUp className="h-4 w-4" />
-              ) : (
-                <ChevronDown className="h-4 w-4" />
-              )}
-            </button>
+            <div className="flex w-full items-center justify-between px-4 py-2 text-gray-500 dark:text-gray-400">
+              <button
+                onClick={() => setShowProjects((prev) => !prev)}
+                className="flex items-center gap-1.5 hover:text-gray-700 dark:hover:text-gray-200"
+              >
+                <span className="text-[11px] font-semibold uppercase tracking-wider">
+                  Projects
+                </span>
+                {showProjects ? (
+                  <ChevronUp className="h-3 w-3" />
+                ) : (
+                  <ChevronDown className="h-3 w-3" />
+                )}
+              </button>
+
+              <button
+                onClick={() => setIsModalNewProjectOpen(true)}
+                className="rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-500 dark:hover:bg-dark-tertiary dark:hover:text-gray-200 transition-colors"
+                title="Create New Project"
+              >
+                <Plus className="h-4 w-4" />
+              </button>
+            </div>
 
             {/* ===================== PROJECTS LIST ===================== */}
             {showProjects && (
@@ -270,6 +283,11 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
+
+      <ModalNewProject
+        isOpen={isModalNewProjectOpen}
+        onClose={() => setIsModalNewProjectOpen(false)}
+      />
     </aside>
   );
 };

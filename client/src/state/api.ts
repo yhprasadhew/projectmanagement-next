@@ -139,6 +139,23 @@ export const api = createApi({
       }),
       invalidatesTags: [{ type: "Tasks", id: "LIST" }],
     }),
+
+    createProject: builder.mutation<Project, Partial<Project>>({
+      query: (project) => ({
+        url: "projects",
+        method: "POST",
+        body: project,
+      }),
+      invalidatesTags: ["Projects"],
+    }),
+
+    deleteProject: builder.mutation<void, number>({
+      query: (projectId) => ({
+        url: `projects/${projectId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Projects"],
+    }),
   }),
 });
 
@@ -149,6 +166,8 @@ export const {
   useUpdateTaskStatusMutation,
   useCreateTaskMutation,
   useDeleteTaskMutation,
+  useCreateProjectMutation,
+  useDeleteProjectMutation,
 } = api;
 
 //
