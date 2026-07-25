@@ -123,6 +123,18 @@ export const api = createApi({
       ],
     }),
 
+    updateTask: builder.mutation<Task, { taskId: number; task: Partial<Task> }>({
+      query: ({ taskId, task }) => ({
+        url: `tasks/${taskId}`,
+        method: "PATCH",
+        body: task,
+      }),
+      invalidatesTags: (result, error, { taskId }) => [
+        { type: "Tasks", id: taskId },
+        { type: "Tasks", id: "LIST" },
+      ],
+    }),
+
     createTask: builder.mutation<Task, Partial<Task>>({
       query: (task) => ({
         url: "tasks",
@@ -168,6 +180,7 @@ export const {
   useDeleteTaskMutation,
   useCreateProjectMutation,
   useDeleteProjectMutation,
+  useUpdateTaskMutation,
 } = api;
 
 //

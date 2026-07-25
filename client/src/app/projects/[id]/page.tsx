@@ -3,6 +3,10 @@
 import React, { useState } from "react";
 import ProjectHeader from "@/app/projects/[id]/ProjectHeader";
 import BoardView from "@/components/board/BoardView";
+import ListView from "@/components/board/ListView";
+import TimelineView from "@/components/board/TimelineView";
+import TableView from "@/components/board/TableView";
+import BacklogView from "@/components/board/BacklogView";
 import { useGetProjectQuery } from "@/state/api";
 import { Loader2 } from "lucide-react";
 import ModalNewTask from "@/components/ModalNewTask";
@@ -51,7 +55,7 @@ const Page = ({ params }: Props) => {
   }
 
   return (
-    <div>
+    <div className="space-y-6">
       <ProjectHeader
         project={project}
         activeTab={activeTab}
@@ -61,14 +65,10 @@ const Page = ({ params }: Props) => {
       />
 
       {activeTab === "Board" && <BoardView projectId={projectId} />}
-
-      {activeTab !== "Board" && (
-        <div className="flex h-48 items-center justify-center rounded-xl border border-dashed border-gray-200 dark:border-stroke-dark">
-          <p className="text-sm text-gray-400 dark:text-gray-500">
-            {activeTab} view coming soon
-          </p>
-        </div>
-      )}
+      {activeTab === "List" && <ListView projectId={projectId} />}
+      {activeTab === "Timeline" && <TimelineView projectId={projectId} />}
+      {activeTab === "Table" && <TableView projectId={projectId} />}
+      {activeTab === "Backlog" && <BacklogView projectId={projectId} />}
 
       <ModalNewTask
         isOpen={isModalNewTaskOpen}
@@ -79,6 +79,4 @@ const Page = ({ params }: Props) => {
   );
 };
 
-
 export default Page;
-//db

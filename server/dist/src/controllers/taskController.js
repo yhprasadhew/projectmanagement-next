@@ -90,4 +90,33 @@ export const deleteTask = async (req, res) => {
         });
     }
 };
+export const updateTask = async (req, res) => {
+    const { taskId } = req.params;
+    const { title, description, status, priority, tags, startDate, dueDate, points, authorUserId, assignedUserId } = req.body;
+    try {
+        const id = Number(taskId);
+        const updatedTask = await prisma.task.update({
+            where: { id },
+            data: {
+                ...(title && { title }),
+                ...(description !== undefined && { description }),
+                ...(status && { status }),
+                ...(priority !== undefined && { priority }),
+                ...(tags !== undefined && { tags }),
+                ...(startDate !== undefined && { startDate: startDate ? new Date(startDate) : null }),
+                ...(dueDate !== undefined && { dueDate: dueDate ? new Date(dueDate) : null }),
+                ...(points !== undefined && { points: points ? Number(points) : null }),
+                ...(authorUserId !== undefined && { authorUserId: authorUserId ? Number(authorUserId) : null }),
+                ...(assignedUserId !== undefined && { assignedUserId: assignedUserId ? Number(assignedUserId) : null }),
+            },
+        });
+        res.json(updatedTask);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Error updating task",
+        });
+    }
+};
 //# sourceMappingURL=taskController.js.map

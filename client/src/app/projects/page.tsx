@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Plus, Briefcase, Calendar, Loader2, ArrowRight } from "lucide-react";
-import { useGetProjectsQuery } from "@/state/api";
+import { Plus, Briefcase, Calendar, Loader2, ArrowRight, Trash2 } from "lucide-react";
+import { useGetProjectsQuery, useDeleteProjectMutation } from "@/state/api";
 import ModalNewProject from "@/components/ModalNewProject";
 
 export default function ProjectsPage() {
   const { data: projects, isLoading, isError } = useGetProjectsQuery();
+  const [deleteProject, { isLoading: isDeleting }] = useDeleteProjectMutation();
   const [isModalNewProjectOpen, setIsModalNewProjectOpen] = useState(false);
 
   if (isLoading) {
@@ -58,6 +59,27 @@ export default function ProjectsPage() {
               href={`/projects/${project.id}`}
               className="group relative flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md dark:border-stroke-dark dark:bg-dark-secondary"
             >
+              {/* Delete Project Button */}
+              <button
+                disabled={isDeleting}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (confirm(`Are you sure you want to delete the project "${project.name}"? This will permanently delete all tasks, comments, and attachments within this project.`)) {
+                    try {
+                      await deleteProject(project.id).unwrap();
+                    } catch (err) {
+                      console.error("Failed to delete project:", err);
+                    }
+                  }
+                }}
+                className="absolute top-4 right-4 rounded-lg p-1.5 text-gray-300 opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/20 dark:hover:text-red-400 transition-all duration-200 disabled:opacity-50"
+                aria-label="Delete project"
+                title="Delete Project"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+
               <div>
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
