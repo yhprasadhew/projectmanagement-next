@@ -6,6 +6,7 @@ export interface Project {
   description?: string;
   startDate?: string;
   endDate?: string;
+  createdAt?: string;
 }
 
 export interface User {
@@ -30,6 +31,7 @@ export interface Comment {
   text: string;
   taskId: number;
   userId: number;
+  createdAt?: string;
 }
 
 export interface Task {
@@ -45,6 +47,8 @@ export interface Task {
   projectId?: number;
   authorUserId?: number;
   assignedUserId?: number;
+  createdAt?: string;
+  updatedAt?: string;
 
   author?: User;
   assignee?: User;
@@ -168,6 +172,20 @@ export const api = createApi({
       }),
       invalidatesTags: ["Projects"],
     }),
+
+    getTasksGlobal: builder.query<Task[], void>({
+      query: () => "tasks",
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({
+                type: "Tasks" as const,
+                id,
+              })),
+              { type: "Tasks", id: "LIST" },
+            ]
+          : [{ type: "Tasks", id: "LIST" }],
+    }),
   }),
 });
 
@@ -181,6 +199,7 @@ export const {
   useCreateProjectMutation,
   useDeleteProjectMutation,
   useUpdateTaskMutation,
+  useGetTasksGlobalQuery,
 } = api;
 
 //
