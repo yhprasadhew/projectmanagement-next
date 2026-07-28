@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useEffect } from "react";
-import { Loader2, Plus, Calendar, Tag } from "lucide-react";
+import { Loader2, Plus, Calendar, Tag, User } from "lucide-react";
 import {
   Task,
   useGetTasksQuery,
@@ -166,7 +166,14 @@ const ListView = ({ projectId }: Props) => {
                           </p>
                         )}
 
-                        <div className="mt-3 flex flex-wrap items-center gap-4 text-[10px] text-gray-400 dark:text-gray-500">
+                        <div className="mt-3 flex flex-wrap items-center gap-4 text-[10px] text-gray-400 dark:text-gray-550">
+                          {task.assignee && (
+                            <div className="flex items-center gap-1 font-medium">
+                              <User className="h-3 w-3 text-gray-405" />
+                              <span>Assignee: <strong className="text-gray-600 dark:text-gray-300 font-semibold">{task.assignee.username}</strong></span>
+                            </div>
+                          )}
+
                           {task.dueDate && (
                             <div className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />

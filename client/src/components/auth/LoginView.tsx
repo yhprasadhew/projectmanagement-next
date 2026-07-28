@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useState } from "react";
-import { LogIn, UserPlus, ShieldAlert, Users, Mail, User, Key, Check } from "lucide-react";
+import { LogIn, ShieldAlert, Users, Mail, Key, Sparkles, HelpCircle, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Mock users list matching seed data
@@ -15,9 +17,7 @@ type Props = {
 };
 
 export default function LoginView({ onLoginSuccess, isCognitoConfigured }: Props) {
-  const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -28,27 +28,11 @@ export default function LoginView({ onLoginSuccess, isCognitoConfigured }: Props
     setError("");
 
     try {
-      if (isSignUp) {
-        const { signUp } = await import("aws-amplify/auth");
-        await signUp({
-          username: email, // Cognito typically expects email as username if configured that way
-          password,
-          options: {
-            userAttributes: {
-              email,
-              name: username,
-            },
-          },
-        });
-        alert("Sign up successful! Please check your email for the verification code. Then log in.");
-        setIsSignUp(false);
-      } else {
-        const { signIn, getCurrentUser } = await import("aws-amplify/auth");
-        await signIn({ username: email, password });
-        const user = await getCurrentUser();
-        // Trigger a page reload to let prepareHeaders fetch the real session token
-        window.location.reload();
-      }
+      const { signIn, getCurrentUser } = await import("aws-amplify/auth");
+      await signIn({ username: email, password });
+      const user = await getCurrentUser();
+      // Trigger a page reload to let prepareHeaders fetch the real session token
+      window.location.reload();
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Authentication failed. Please check your credentials.");
@@ -57,17 +41,43 @@ export default function LoginView({ onLoginSuccess, isCognitoConfigured }: Props
     }
   };
 
-  const handleMockLogin = (mockUsername: string, mockEmail: string, mockRole: string) => {
+  const handleLocalLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
-    // Write mock token to localStorage
-    const mockToken = `mock-token-${mockUsername}`;
-    localStorage.setItem("authToken", mockToken);
-    localStorage.setItem("authUser", JSON.stringify({ username: mockUsername, email: mockEmail, role: mockRole }));
-    
-    setTimeout(() => {
-      onLoginSuccess(mockToken, { username: mockUsername, email: mockEmail, role: mockRole });
-      setIsLoading(false);
-    }, 600);
+    setError("");
+
+    // Find user in MOCK_USERS matching email or username (case-insensitive)
+    const normalizedInput = email.toLowerCase().trim();
+    const matchedUser = MOCK_USERS.find(
+      (u) =>
+        u.email.toLowerCase() === normalizedInput ||
+        u.username.toLowerCase() === normalizedInput
+    );
+
+    if (matchedUser) {
+      // Simulate real auth validation delay
+      setTimeout(() => {
+        const mockToken = `mock-token-${matchedUser.username}`;
+        localStorage.setItem("authToken", mockToken);
+        localStorage.setItem("authUser", JSON.stringify({ 
+          username: matchedUser.username, 
+          email: matchedUser.email, 
+          role: matchedUser.role 
+        }));
+
+        onLoginSuccess(mockToken, { 
+          username: matchedUser.username, 
+          email: matchedUser.email, 
+          role: matchedUser.role 
+        });
+        setIsLoading(false);
+      }, 800);
+    } else {
+      setTimeout(() => {
+        setError("Invalid username or email. Please check the seed database accounts on the right.");
+        setIsLoading(false);
+      }, 500);
+    }
   };
 
   return (
@@ -78,128 +88,95 @@ export default function LoginView({ onLoginSuccess, isCognitoConfigured }: Props
         <div className="flex-1 p-8 sm:p-12 flex flex-col justify-center">
           <div className="mb-8">
             <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-              {isSignUp ? "Create your Account" : "Sign In to TaskFlow"}
+              Sign In to TaskFlow
             </h2>
             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              {isSignUp ? "Start managing your team's project deliverables" : "Access your projects, tasks, and analytics dashboard"}
+              Access your company's projects, assigned tasks, and workflow dashboards
             </p>
           </div>
 
           {error && (
-            <div className="mb-6 flex items-start gap-2.5 rounded-xl bg-red-50 p-4 text-xs font-semibold text-red-700 dark:bg-red-950/20 dark:text-red-400">
+            <div className="mb-6 flex items-start gap-2.5 rounded-xl bg-red-50 p-4 text-xs font-semibold text-red-700 dark:bg-red-955/20 dark:text-red-400">
               <ShieldAlert className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
-          {isCognitoConfigured ? (
-            <form onSubmit={handleCognitoAuth} className="space-y-4">
-              {isSignUp && (
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Username (Full Name)</label>
-                  <div className="relative">
-                    <User className="absolute left-3.5 top-3 h-4 w-4 text-gray-450 dark:text-gray-500" />
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Alice Jones"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="w-full rounded-xl border border-gray-200 bg-white pl-10.5 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-              )}
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-3.5 top-3 h-4 w-4 text-gray-450 dark:text-gray-500" />
-                  <input
-                    type="email"
-                    required
-                    placeholder="email@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 bg-white pl-10.5 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500"
-                  />
-                </div>
+          <form onSubmit={isCognitoConfigured ? handleCognitoAuth : handleLocalLoginSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-gray-550 dark:text-gray-400 mb-1.5">
+                Username or Email Address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3.5 top-3 h-4 w-4 text-gray-450 dark:text-gray-500" />
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. AliceJones or alicejones@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-xl border border-gray-250/70 bg-white pl-10.5 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500"
+                />
               </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Password</label>
-                <div className="relative">
-                  <Key className="absolute left-3.5 top-3 h-4 w-4 text-gray-450 dark:text-gray-500" />
-                  <input
-                    type="password"
-                    required
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 bg-white pl-10.5 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500"
-                  />
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full mt-4 flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50"
-              >
-                {isLoading ? "Processing..." : isSignUp ? "Sign Up" : "Sign In"}
-              </button>
-            </form>
-          ) : (
-            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-6 dark:border-amber-900/40 dark:bg-amber-900/10">
-              <h4 className="text-sm font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1.5">
-                <ShieldAlert className="h-4.5 w-4.5" />
-                AWS Cognito Not Configured
-              </h4>
-              <p className="text-xs text-amber-700 dark:text-amber-550 mt-1.5 leading-relaxed">
-                We detected that `NEXT_PUBLIC_COGNITO_USER_POOL_ID` is not defined in your frontend environment. Please use the **Local Demo Bypass** panel on the right to log in as a seeded developer.
-              </p>
             </div>
-          )}
 
-          {isCognitoConfigured && (
-            <div className="mt-6 text-center text-xs">
-              <span className="text-gray-450 dark:text-gray-500">
-                {isSignUp ? "Already have an account? " : "Need a new account? "}
-              </span>
-              <button
-                type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="font-semibold text-blue-600 hover:underline dark:text-blue-400"
-              >
-                {isSignUp ? "Sign In" : "Sign Up"}
-              </button>
+            <div>
+              <label className="block text-xs font-semibold text-gray-550 dark:text-gray-400 mb-1.5">
+                Password
+              </label>
+              <div className="relative">
+                <Key className="absolute left-3.5 top-3 h-4 w-4 text-gray-450 dark:text-gray-500" />
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-xl border border-gray-250/70 bg-white pl-10.5 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full mt-4 flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:opacity-50 shadow-sm"
+            >
+              <LogIn className="h-4 w-4" />
+              {isLoading ? "Signing In..." : "Sign In"}
+            </button>
+          </form>
+
+          {!isCognitoConfigured && (
+            <div className="mt-5 rounded-xl border border-blue-100 bg-blue-50/40 p-3.5 dark:border-blue-900/20 dark:bg-blue-950/10">
+              <p className="text-[10px] text-blue-700 dark:text-blue-400 leading-relaxed font-medium flex gap-1 items-start">
+                <Sparkles className="h-3.5 w-3.5 shrink-0 text-blue-500 mt-0.5" />
+                <span>Running in Local Mode. Enter any password and choose one of the pre-seeded credentials listed on the right panel to authenticate.</span>
+              </p>
             </div>
           )}
         </div>
 
-        {/* Right Side: Demo Bypass Panel */}
-        <div className="flex-1 bg-slate-900/5 dark:bg-black/10 border-t md:border-t-0 md:border-l border-gray-200 dark:border-stroke-dark/40 p-8 sm:p-12 flex flex-col justify-center">
+        {/* Right Side: Information / Help Panel */}
+        <div className="flex-1 bg-slate-900/5 dark:bg-black/10 border-t md:border-t-0 md:border-l border-gray-250/70 dark:border-stroke-dark/40 p-8 sm:p-12 flex flex-col justify-center">
           <div className="mb-6">
             <h3 className="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
-              <Users className="h-5 w-5 text-blue-500" />
-              Local Demo Bypass
+              <HelpCircle className="h-5 w-5 text-blue-500" />
+              Seeded Company Accounts
             </h3>
-            <p className="text-xs text-gray-550 dark:text-gray-400 mt-1">
-              Select one of the pre-seeded PostgreSQL users below to simulate role-based authorization:
+            <p className="text-xs text-gray-550 dark:text-gray-400 mt-1 leading-relaxed">
+              Use these pre-configured database profiles to test role-based access control inside the company:
             </p>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-4">
             {MOCK_USERS.map((user) => (
-              <button
+              <div
                 key={user.username}
-                type="button"
-                onClick={() => handleMockLogin(user.username, user.email, user.role)}
-                disabled={isLoading}
-                className="w-full text-left flex items-center justify-between p-4 rounded-2xl border border-gray-200 bg-white transition-all hover:-translate-y-0.5 hover:shadow-md dark:border-stroke-dark dark:bg-dark-tertiary"
+                className="flex items-center justify-between p-4 rounded-2xl border border-gray-200 bg-white dark:border-stroke-dark dark:bg-dark-tertiary select-none"
               >
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 font-bold dark:bg-blue-500/20 dark:text-blue-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600 font-bold dark:bg-blue-500/20 dark:text-blue-450">
                     {user.avatar}
                   </div>
                   <div>
@@ -212,19 +189,19 @@ export default function LoginView({ onLoginSuccess, isCognitoConfigured }: Props
                   </div>
                 </div>
                 <span className={cn(
-                  "rounded-full px-2 py-0.5 text-[10px] font-semibold",
+                  "rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider",
                   user.role === "Project Leader" 
-                    ? "bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400" 
-                    : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400"
+                    ? "bg-purple-100 text-purple-700 dark:bg-purple-900/20 dark:text-purple-400 border border-purple-200/50 dark:border-purple-800/30" 
+                    : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400 border border-emerald-200/50 dark:border-emerald-800/30"
                 )}>
-                  {user.role}
+                  {user.role === "Project Leader" ? "Project Mgr" : "Developer"}
                 </span>
-              </button>
+              </div>
             ))}
           </div>
 
-          <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-5 text-center leading-relaxed">
-            * Simulates a verified login state. In this mode, standard members only see projects they are assigned to, and leaders see all.
+          <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-6 text-center leading-relaxed">
+            * Developer accounts automatically redirect to their workspace. Project Managers have full dashboard and Kanban board access.
           </p>
         </div>
 

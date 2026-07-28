@@ -67,6 +67,7 @@ const Sidebar = () => {
       href: "/",
       label: "Dashboard",
       icon: LayoutDashboard,
+      hidden: !isLeader,
     },
     {
       href: "/developer",
@@ -160,7 +161,7 @@ const Sidebar = () => {
           </p>
 
           <nav className="space-y-1">
-            {navLinks.map((link) => {
+            {navLinks.filter(link => !link.hidden).map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
 

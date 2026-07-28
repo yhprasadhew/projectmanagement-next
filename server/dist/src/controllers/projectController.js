@@ -1,5 +1,6 @@
 import { prisma } from "../prisma.js";
 import crypto from "crypto";
+import { isProjectManager } from "../lib/roles.js";
 export const getProjects = async (req, res) => {
     const user = req.user;
     try {
@@ -75,6 +76,10 @@ export const createProject = async (req, res) => {
     const { name, description, startDate, endDate } = req.body;
     const user = req.user;
     try {
+        if (!user || !isProjectManager(user.role)) {
+            res.status(403).json({ message: "Forbidden: Only project managers can create projects" });
+            return;
+        }
         const newProject = await prisma.project.create({
             data: {
                 name,
@@ -99,6 +104,11 @@ export const createProject = async (req, res) => {
 };
 export const deleteProject = async (req, res) => {
     const { projectId } = req.params;
+    const user = req.user;
+    if (!user || !isProjectManager(user.role)) {
+        res.status(403).json({ message: "Forbidden: Only project managers can delete projects" });
+        return;
+    }
     try {
         const id = Number(projectId);
         // Check if project exists
@@ -145,6 +155,11 @@ export const deleteProject = async (req, res) => {
 export const addProjectMember = async (req, res) => {
     const { projectId } = req.params;
     const { email, username, position } = req.body;
+    const user = req.user;
+    if (!user || !isProjectManager(user.role)) {
+        res.status(403).json({ message: "Forbidden: Only project managers can add members" });
+        return;
+    }
     try {
         const projId = Number(projectId);
         // 1. Check if user already exists
@@ -204,6 +219,42 @@ export const getProjectMembers = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({ message: "Error retrieving project members" });
+    }
+};
+export const removeProjectMember = async (req, res) => {
+    const { projectId, userId } = req.params;
+    const user = req.user;
+    if (!user || !isProjectManager(user.role)) {
+        res.status(403).json({ message: "Forbidden: Only project managers can remove members" });
+        return;
+    }
+    try {
+        const projId = Number(projectId);
+        const uId = Number(userId);
+        // Unassign tasks of this project currently assigned to this user
+        await prisma.task.updateMany({
+            where: {
+                projectId: projId,
+                assignedUserId: uId,
+            },
+            data: {
+                assignedUserId: null,
+            },
+        });
+        // Disconnect user from project members
+        await prisma.project.update({
+            where: { id: projId },
+            data: {
+                members: {
+                    disconnect: { id: uId },
+                },
+            },
+        });
+        res.status(200).json({ message: "Member removed from project successfully" });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error removing member from project" });
     }
 };
 //# sourceMappingURL=projectController.js.map

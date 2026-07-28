@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { 
   useGetProjectMembersQuery, 
-  useAddProjectMemberMutation 
+  useAddProjectMemberMutation,
+  useRemoveProjectMemberMutation
 } from "@/state/api";
-import { Loader2, Plus, Mail, User, Briefcase, X, UserCheck } from "lucide-react";
+import { Loader2, Plus, Mail, User, Briefcase, X, UserCheck, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -13,6 +14,18 @@ type Props = {
 export default function ProjectMembersView({ projectId }: Props) {
   const { data: members, isLoading, isError, refetch } = useGetProjectMembersQuery(projectId);
   const [addMember, { isLoading: isAdding }] = useAddProjectMemberMutation();
+  const [removeMember, { isLoading: isRemoving }] = useRemoveProjectMemberMutation();
+
+  const handleRemoveMember = async (userId: number) => {
+    if (confirm("Are you sure you want to remove this member from the project? Any tasks assigned to them will be unassigned.")) {
+      try {
+        await removeMember({ projectId, userId }).unwrap();
+        refetch();
+      } catch (err) {
+        console.error("Failed to remove member:", err);
+      }
+    }
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -125,6 +138,17 @@ export default function ProjectMembersView({ projectId }: Props) {
                 key={member.id}
                 className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md dark:border-stroke-dark dark:bg-dark-secondary flex flex-col items-center text-center group"
               >
+                {isLeader && (
+                  <button
+                    type="button"
+                    disabled={isRemoving}
+                    onClick={() => member.id !== undefined && handleRemoveMember(member.id)}
+                    className="absolute top-3 right-3 p-1.5 text-gray-300 opacity-0 group-hover:opacity-100 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-955/20 rounded-lg transition-all duration-200 cursor-pointer disabled:opacity-50"
+                    title="Remove Member from Project"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
                 {/* Colored Avatar bubble */}
                 <div className="h-14 w-14 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 text-white text-xl font-bold flex items-center justify-center shadow-inner group-hover:scale-105 transition-transform duration-300">
                   {initial}

@@ -63,7 +63,9 @@ async function main() {
     const userData = JSON.parse(fs.readFileSync(userFilePath, "utf-8"));
     for (const user of userData) {
         const email = `${user.username.toLowerCase()}@example.com`;
-        const role = user.username === "BobSmith" ? "PROJECT_LEADER" : "USER";
+        const role = ["BobSmith", "EveClark"].includes(user.username)
+            ? "PROJECT_LEADER"
+            : "USER";
         await prisma.user.create({
             data: {
                 ...user,

@@ -231,6 +231,20 @@ export const api = createApi({
       ],
     }),
 
+    removeProjectMember: builder.mutation<
+      void,
+      { projectId: number; userId: number }
+    >({
+      query: ({ projectId, userId }) => ({
+        url: `projects/${projectId}/members/${userId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, { projectId }) => [
+        { type: "Users", id: `MEMBERS-${projectId}` },
+        { type: "Tasks", id: "LIST" },
+      ],
+    }),
+
     createComment: builder.mutation<
       Comment,
       { taskId: number; text: string }
@@ -278,6 +292,7 @@ export const {
   useAddProjectMemberMutation,
   useCreateCommentMutation,
   useCreateAttachmentMutation,
+  useRemoveProjectMemberMutation,
 } = api;
 
 //

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { Calendar, GripVertical, Tag, Trash2 } from "lucide-react";
+import { Calendar, GripVertical, Tag, Trash2, User } from "lucide-react";
 import { Task, useDeleteTaskMutation } from "@/state/api";
 import { cn } from "@/lib/utils";
 
@@ -117,6 +117,13 @@ const TaskCard = ({ task }: Props) => {
               {tag.trim()}
             </span>
           ))}
+        </div>
+      )}
+
+      {task.assignee && (
+        <div className="mb-3 flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-405 font-medium">
+          <User className="h-3.5 w-3.5 text-gray-450" />
+          <span>Assignee: <strong className="text-gray-700 dark:text-gray-300 font-semibold">{task.assignee.username}</strong></span>
         </div>
       )}
 

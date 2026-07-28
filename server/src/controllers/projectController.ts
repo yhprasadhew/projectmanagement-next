@@ -261,3 +261,47 @@ export const getProjectMembers = async (
     res.status(500).json({ message: "Error retrieving project members" });
   }
 };
+
+export const removeProjectMember = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { projectId, userId } = req.params;
+  const user = (req as any).user;
+
+  if (!user || !isProjectManager(user.role)) {
+    res.status(403).json({ message: "Forbidden: Only project managers can remove members" });
+    return;
+  }
+
+  try {
+    const projId = Number(projectId);
+    const uId = Number(userId);
+
+    // Unassign tasks of this project currently assigned to this user
+    await prisma.task.updateMany({
+      where: {
+        projectId: projId,
+        assignedUserId: uId,
+      },
+      data: {
+        assignedUserId: null,
+      },
+    });
+
+    // Disconnect user from project members
+    await prisma.project.update({
+      where: { id: projId },
+      data: {
+        members: {
+          disconnect: { id: uId },
+        },
+      },
+    });
+
+    res.status(200).json({ message: "Member removed from project successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error removing member from project" });
+  }
+};

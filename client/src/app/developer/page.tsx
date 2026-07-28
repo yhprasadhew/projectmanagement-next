@@ -410,13 +410,20 @@ export default function DeveloperWorkspace() {
                     <div className="flex flex-wrap gap-1">
                       {task.tags.split(",").map(tag => (
                         <span key={tag} className="flex items-center gap-1 rounded bg-slate-50 border border-gray-100 px-2 py-0.5 text-[9px] text-gray-500 dark:bg-dark-tertiary dark:border-stroke-dark dark:text-gray-400">
-                          <Tag className="h-2 w-2.5" />
+                          <Tag className="h-2.5 w-2.5" />
                           {tag.trim()}
                         </span>
                       ))}
                     </div>
                   )}
                 </div>
+
+                {task.assignee && (
+                  <div className="mb-3 flex items-center gap-1.5 text-[11px] text-gray-505 dark:text-gray-405 font-medium w-full mt-2">
+                    <User className="h-3.5 w-3.5 text-gray-450" />
+                    <span>Assignee: <strong className="text-gray-700 dark:text-gray-300 font-semibold">{task.assignee.username}</strong></span>
+                  </div>
+                )}
 
                 {/* Footer with date & status */}
                 <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-2 w-full dark:border-stroke-dark">
@@ -474,6 +481,14 @@ export default function DeveloperWorkspace() {
                   <div className="flex-1 p-6 space-y-6">
                     {/* Status & Priority badges row */}
                     <div className="flex flex-wrap items-center gap-4">
+                      <div className="space-y-1">
+                        <span className="block text-[10px] font-bold uppercase tracking-wide text-gray-400">Assignee</span>
+                        <div className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold text-gray-550 rounded-lg border border-gray-200 dark:border-stroke-dark dark:text-gray-400">
+                          <User className="h-3.5 w-3.5 text-gray-450" />
+                          <span>{latestSelectedTask.assignee?.username || "Unassigned"}</span>
+                        </div>
+                      </div>
+
                       <div className="space-y-1">
                         <span className="block text-[10px] font-bold uppercase tracking-wide text-gray-400">Status</span>
                         <select

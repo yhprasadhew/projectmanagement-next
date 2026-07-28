@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Briefcase,
   CheckSquare,
@@ -54,14 +55,30 @@ const getUserNameById = (userId: number) => {
 };
 
 export default function Home() {
+  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const { data: projects, isLoading: projectsLoading, isError: projectsError } = useGetProjectsQuery();
-  const { data: tasks, isLoading: tasksLoading, isError: tasksError } = useGetTasksGlobalQuery();
-  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
   useEffect(() => {
+    const savedUser = localStorage.getItem("authUser");
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.role !== "Project Leader" && parsed.role !== "PROJECT_LEADER") {
+          router.push("/developer");
+          return;
+        }
+      } catch (e) {}
+    }
     setIsMounted(true);
-  }, []);
+  }, [router]);
+
+  const { data: projects, isLoading: projectsLoading, isError: projectsError } = useGetProjectsQuery(undefined, {
+    skip: !isMounted,
+  });
+  const { data: tasks, isLoading: tasksLoading, isError: tasksError } = useGetTasksGlobalQuery(undefined, {
+    skip: !isMounted,
+  });
+  const isDarkMode = useAppSelector((state) => state.global.isDarkMode);
 
   // 1. KPI Statistics Calculations
   const stats = useMemo(() => {
