@@ -32,3 +32,6 @@ const DashboardCard = ({ title, value, icon, accentClass }: Props) => {
 };
 
 export default DashboardCard;
+
+
+//node dist/src/index.js
