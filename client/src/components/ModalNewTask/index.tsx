@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Loader2 } from "lucide-react";
-import { useCreateTaskMutation } from "@/state/api";
+import { useCreateTaskMutation, useGetProjectMembersQuery } from "@/state/api";
 
 type Props = {
   isOpen: boolean;
@@ -10,6 +10,7 @@ type Props = {
 
 const ModalNewTask = ({ isOpen, onClose, projectId }: Props) => {
   const [createTask, { isLoading }] = useCreateTaskMutation();
+  const { data: members, isLoading: membersLoading } = useGetProjectMembersQuery(projectId);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -17,14 +18,36 @@ const ModalNewTask = ({ isOpen, onClose, projectId }: Props) => {
   const [tags, setTags] = useState("");
   const [startDate, setStartDate] = useState("");
   const [dueDate, setDueDate] = useState("");
-  const [assignedUserId, setAssignedUserId] = useState("1");
-  const [authorUserId, setAuthorUserId] = useState("1");
+  const [assignedUserId, setAssignedUserId] = useState("");
+  const [authorUserId, setAuthorUserId] = useState("2");
+  const [authorName, setAuthorName] = useState("BobSmith");
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("authUser");
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.userId) {
+          setAuthorUserId(parsed.userId.toString());
+        }
+        if (parsed.username) {
+          setAuthorName(parsed.username);
+        }
+      } catch (e) {}
+    }
+  }, []);
+
+  useEffect(() => {
+    if (members && members.length > 0 && !assignedUserId) {
+      setAssignedUserId(members[0].id?.toString() || "");
+    }
+  }, [members, assignedUserId]);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title) return;
+    if (!title || !assignedUserId) return;
 
     try {
       await createTask({
@@ -47,8 +70,7 @@ const ModalNewTask = ({ isOpen, onClose, projectId }: Props) => {
       setTags("");
       setStartDate("");
       setDueDate("");
-      setAssignedUserId("1");
-      setAuthorUserId("1");
+      setAssignedUserId(members?.[0]?.id?.toString() || "");
       
       onClose();
     } catch (error) {
@@ -167,26 +189,40 @@ const ModalNewTask = ({ isOpen, onClose, projectId }: Props) => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1.5">
-                Author ID
+                Author
               </label>
               <input
-                type="number"
-                value={authorUserId}
-                onChange={(e) => setAuthorUserId(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 outline-none transition-all focus:border-blue-500 focus:bg-white dark:border-stroke-dark dark:bg-dark-tertiary dark:text-gray-200 dark:focus:bg-dark-bg"
+                type="text"
+                disabled
+                value={authorName}
+                className="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-2 text-sm text-gray-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:text-gray-400 cursor-not-allowed"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1.5">
-                Assigned ID
+                Assignee *
               </label>
-              <input
-                type="number"
-                value={assignedUserId}
-                onChange={(e) => setAssignedUserId(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 outline-none transition-all focus:border-blue-500 focus:bg-white dark:border-stroke-dark dark:bg-dark-tertiary dark:text-gray-200 dark:focus:bg-dark-bg"
-              />
+              {membersLoading ? (
+                <div className="flex items-center h-9 text-xs text-gray-450">Loading members...</div>
+              ) : members && members.length > 0 ? (
+                <select
+                  required
+                  value={assignedUserId}
+                  onChange={(e) => setAssignedUserId(e.target.value)}
+                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 outline-none transition-all focus:border-blue-500 focus:bg-white dark:border-stroke-dark dark:bg-dark-tertiary dark:text-gray-200 dark:focus:bg-dark-bg cursor-pointer"
+                >
+                  {members.map((member) => (
+                    <option key={member.id} value={member.id?.toString()}>
+                      {member.username} ({member.position || "Developer"})
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div className="text-xs text-red-500 font-semibold h-9 flex items-center">
+                  Please add members to this project first
+                </div>
+              )}
             </div>
           </div>
 

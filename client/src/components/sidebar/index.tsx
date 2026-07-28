@@ -26,6 +26,19 @@ const Sidebar = () => {
   const[showProjects,setShowProjects]= useState(true);
   const [showPriority ,setShowPriority] = useState(true);
   const [isModalNewProjectOpen, setIsModalNewProjectOpen] = useState(false);
+  const [isLeader, setIsLeader] = useState(false);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("authUser");
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.role === "Project Leader" || parsed.role === "PROJECT_LEADER") {
+          setIsLeader(true);
+        }
+      } catch (e) {}
+    }
+  }, []);
 
   const { data: project}= useGetProjectsQuery();
   
@@ -185,13 +198,15 @@ const Sidebar = () => {
                 )}
               </button>
 
-              <button
-                onClick={() => setIsModalNewProjectOpen(true)}
-                className="rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-500 dark:hover:bg-dark-tertiary dark:hover:text-gray-200 transition-colors"
-                title="Create New Project"
-              >
-                <Plus className="h-4 w-4" />
-              </button>
+              {isLeader && (
+                <button
+                  onClick={() => setIsModalNewProjectOpen(true)}
+                  className="rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-500 dark:hover:bg-dark-tertiary dark:hover:text-gray-200 transition-colors"
+                  title="Create New Project"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              )}
             </div>
 
             {/* ===================== PROJECTS LIST ===================== */}

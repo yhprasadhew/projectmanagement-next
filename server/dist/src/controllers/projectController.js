@@ -32,10 +32,32 @@ export const getProjects = async (req, res) => {
 };
 export const getProjectById = async (req, res) => {
     const { projectId } = req.params;
+    const user = req.user;
     try {
-        const project = await prisma.project.findUnique({
-            where: { id: Number(projectId) },
-        });
+        const id = Number(projectId);
+        let project;
+        if (user && user.role === "PROJECT_LEADER") {
+            project = await prisma.project.findUnique({
+                where: { id },
+            });
+        }
+        else if (user) {
+            project = await prisma.project.findFirst({
+                where: {
+                    id,
+                    members: {
+                        some: {
+                            id: user.userId,
+                        },
+                    },
+                },
+            });
+        }
+        else {
+            project = await prisma.project.findUnique({
+                where: { id },
+            });
+        }
         if (!project) {
             res.status(404).json({ message: "Project not found" });
             return;

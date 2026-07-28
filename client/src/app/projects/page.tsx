@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Plus, Briefcase, Calendar, Loader2, ArrowRight, Trash2 } from "lucide-react";
 import { useGetProjectsQuery, useDeleteProjectMutation } from "@/state/api";
@@ -10,6 +10,19 @@ export default function ProjectsPage() {
   const { data: projects, isLoading, isError } = useGetProjectsQuery();
   const [deleteProject, { isLoading: isDeleting }] = useDeleteProjectMutation();
   const [isModalNewProjectOpen, setIsModalNewProjectOpen] = useState(false);
+  const [isLeader, setIsLeader] = useState(false);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("authUser");
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.role === "Project Leader" || parsed.role === "PROJECT_LEADER") {
+          setIsLeader(true);
+        }
+      } catch (e) {}
+    }
+  }, []);
 
   if (isLoading) {
     return (
@@ -41,13 +54,15 @@ export default function ProjectsPage() {
             Directory of all active and scheduled team projects.
           </p>
         </div>
-        <button
-          onClick={() => setIsModalNewProjectOpen(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
-        >
-          <Plus className="h-4 w-4" />
-          <span>New Project</span>
-        </button>
+        {isLeader && (
+          <button
+            onClick={() => setIsModalNewProjectOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+          >
+            <Plus className="h-4 w-4" />
+            <span>New Project</span>
+          </button>
+        )}
       </div>
 
       {/* Projects Grid */}
@@ -60,25 +75,27 @@ export default function ProjectsPage() {
               className="group relative flex flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md dark:border-stroke-dark dark:bg-dark-secondary"
             >
               {/* Delete Project Button */}
-              <button
-                disabled={isDeleting}
-                onClick={async (e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  if (confirm(`Are you sure you want to delete the project "${project.name}"? This will permanently delete all tasks, comments, and attachments within this project.`)) {
-                    try {
-                      await deleteProject(project.id).unwrap();
-                    } catch (err) {
-                      console.error("Failed to delete project:", err);
+              {isLeader && (
+                <button
+                  disabled={isDeleting}
+                  onClick={async (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (confirm(`Are you sure you want to delete the project "${project.name}"? This will permanently delete all tasks, comments, and attachments within this project.`)) {
+                      try {
+                        await deleteProject(project.id).unwrap();
+                      } catch (err) {
+                        console.error("Failed to delete project:", err);
+                      }
                     }
-                  }
-                }}
-                className="absolute top-4 right-4 rounded-lg p-1.5 text-gray-300 opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/20 dark:hover:text-red-400 transition-all duration-200 disabled:opacity-50"
-                aria-label="Delete project"
-                title="Delete Project"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+                  }}
+                  className="absolute top-4 right-4 rounded-lg p-1.5 text-gray-300 opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/20 dark:hover:text-red-400 transition-all duration-200 disabled:opacity-50"
+                  aria-label="Delete project"
+                  title="Delete Project"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              )}
 
               <div>
                 <div className="flex items-center gap-3">
@@ -90,7 +107,7 @@ export default function ProjectsPage() {
                   </h3>
                 </div>
 
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 line-clamp-2">
+                <p className="text-xs text-gray-550 dark:text-gray-400 mt-4 line-clamp-2">
                   {project.description || "No description provided."}
                 </p>
               </div>
@@ -129,15 +146,17 @@ export default function ProjectsPage() {
             No projects found
           </h3>
           <p className="mt-1 text-xs text-gray-400 dark:text-gray-500 max-w-xs">
-            Get started by creating your first project directory.
+            {isLeader ? "Get started by creating your first project directory." : "You have not been assigned to any projects yet."}
           </p>
-          <button
-            onClick={() => setIsModalNewProjectOpen(true)}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-blue-700"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            <span>Create First Project</span>
-          </button>
+          {isLeader && (
+            <button
+              onClick={() => setIsModalNewProjectOpen(true)}
+              className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-blue-700"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              <span>Create First Project</span>
+            </button>
+          )}
         </div>
       )}
 

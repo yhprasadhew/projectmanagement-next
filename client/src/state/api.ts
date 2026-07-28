@@ -10,6 +10,7 @@ export interface Project {
 }
 
 export interface User {
+  id?: number;
   userId?: number;
   username: string;
   email: string;
@@ -20,19 +21,22 @@ export interface User {
   position?: string;
 }
 
-export interface Attachment {
-  id: number;
-  fileURL: string;
-  fileName: string;
-  taskId: number;
-  userId: number;
-}
-
 export interface Comment {
   id: number;
   text: string;
   taskId: number;
   userId: number;
+  createdAt?: string;
+  user?: User;
+}
+
+export interface Attachment {
+  id: number;
+  fileURL: string;
+  fileName: string;
+  taskId: number;
+  uploadedById: number;
+  uploadedBy?: User;
   createdAt?: string;
 }
 

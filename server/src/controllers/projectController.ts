@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { prisma } from "../prisma.js";
 import crypto from "crypto";
+import { isProjectManager } from "../lib/roles.js";
 
 export const getProjects = async (
   req: Request,
@@ -39,11 +40,32 @@ export const getProjectById = async (
   res: Response
 ): Promise<void> => {
   const { projectId } = req.params;
+  const user = (req as any).user;
 
   try {
-    const project = await prisma.project.findUnique({
-      where: { id: Number(projectId) },
-    });
+    const id = Number(projectId);
+    let project;
+
+    if (user && user.role === "PROJECT_LEADER") {
+      project = await prisma.project.findUnique({
+        where: { id },
+      });
+    } else if (user) {
+      project = await prisma.project.findFirst({
+        where: {
+          id,
+          members: {
+            some: {
+              id: user.userId,
+            },
+          },
+        },
+      });
+    } else {
+      project = await prisma.project.findUnique({
+        where: { id },
+      });
+    }
 
     if (!project) {
       res.status(404).json({ message: "Project not found" });
@@ -67,6 +89,11 @@ export const createProject = async (
   const user = (req as any).user;
 
   try {
+    if (!user || !isProjectManager(user.role)) {
+      res.status(403).json({ message: "Forbidden: Only project managers can create projects" });
+      return;
+    }
+
     const newProject = await prisma.project.create({
       data: {
         name,
@@ -95,6 +122,12 @@ export const deleteProject = async (
   res: Response
 ): Promise<void> => {
   const { projectId } = req.params;
+  const user = (req as any).user;
+
+  if (!user || !isProjectManager(user.role)) {
+    res.status(403).json({ message: "Forbidden: Only project managers can delete projects" });
+    return;
+  }
 
   try {
     const id = Number(projectId);
@@ -152,6 +185,12 @@ export const addProjectMember = async (
 ): Promise<void> => {
   const { projectId } = req.params;
   const { email, username, position } = req.body;
+  const user = (req as any).user;
+
+  if (!user || !isProjectManager(user.role)) {
+    res.status(403).json({ message: "Forbidden: Only project managers can add members" });
+    return;
+  }
 
   try {
     const projId = Number(projectId);
