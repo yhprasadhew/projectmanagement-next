@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Loader2, Plus, Calendar, Tag } from "lucide-react";
 import {
   Task,
@@ -18,12 +18,22 @@ const priorityStyles: Record<string, string> = {
   urgent: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800/40",
   high: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-800/40",
   medium: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 border border-yellow-200 dark:border-yellow-800/40",
-  low: "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400 border border-sky-200 dark:border-sky-800/40",
+  low: "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400 border border-sky-250 dark:border-sky-800/40",
 };
 
 const ListView = ({ projectId }: Props) => {
   const { data: tasks, isLoading, isError } = useGetTasksQuery({ projectId });
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("authUser");
+    if (savedUser) {
+      try {
+        setCurrentUser(JSON.parse(savedUser));
+      } catch (e) {}
+    }
+  }, []);
 
   const tasksByStatus = useMemo(() => {
     const grouped: Record<TaskStatus, Task[]> = {
@@ -103,8 +113,12 @@ const ListView = ({ projectId }: Props) => {
                   const priorityKey = task.priority?.toLowerCase() ?? "";
                   const priorityClass =
                     priorityStyles[priorityKey] ??
-                    "bg-gray-100 text-gray-600 dark:bg-dark-tertiary dark:text-gray-400 border border-gray-200 dark:border-stroke-dark";
+                    "bg-gray-100 text-gray-650 dark:bg-dark-tertiary dark:text-gray-405 border border-gray-200 dark:border-stroke-dark";
                   const isCompleted = normalizeStatus(task.status) === "Completed";
+                  const isManager = currentUser && (currentUser.role === "Project Leader" || currentUser.role === "PROJECT_LEADER");
+                  const currentId = currentUser?.id || currentUser?.userId;
+                  const isAssigned = currentId !== undefined && task.assignedUserId === currentId;
+                  const canToggle = isManager || isAssigned;
 
                   return (
                     <div
@@ -115,8 +129,12 @@ const ListView = ({ projectId }: Props) => {
                       <input
                         type="checkbox"
                         checked={isCompleted}
+                        disabled={!canToggle}
                         onChange={() => handleToggleComplete(task)}
-                        className="h-4.5 w-4.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary cursor-pointer mt-0.5"
+                        className={cn(
+                          "h-4.5 w-4.5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary mt-0.5",
+                          canToggle ? "cursor-pointer" : "cursor-not-allowed opacity-60"
+                        )}
                       />
 
                       {/* Content */}

@@ -230,6 +230,36 @@ export const api = createApi({
         { type: "Users", id: `MEMBERS-${projectId}` },
       ],
     }),
+
+    createComment: builder.mutation<
+      Comment,
+      { taskId: number; text: string }
+    >({
+      query: ({ taskId, text }) => ({
+        url: `tasks/${taskId}/comments`,
+        method: "POST",
+        body: { text },
+      }),
+      invalidatesTags: (result, error, { taskId }) => [
+        { type: "Tasks", id: taskId },
+        { type: "Tasks", id: "LIST" },
+      ],
+    }),
+
+    createAttachment: builder.mutation<
+      Attachment,
+      { taskId: number; fileName: string; fileURL: string }
+    >({
+      query: ({ taskId, fileName, fileURL }) => ({
+        url: `tasks/${taskId}/attachments`,
+        method: "POST",
+        body: { fileName, fileURL },
+      }),
+      invalidatesTags: (result, error, { taskId }) => [
+        { type: "Tasks", id: taskId },
+        { type: "Tasks", id: "LIST" },
+      ],
+    }),
   }),
 });
 
@@ -246,6 +276,8 @@ export const {
   useGetTasksGlobalQuery,
   useGetProjectMembersQuery,
   useAddProjectMemberMutation,
+  useCreateCommentMutation,
+  useCreateAttachmentMutation,
 } = api;
 
 //

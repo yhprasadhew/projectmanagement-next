@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Loader2, Inbox, Calendar, AlertCircle, Save } from "lucide-react";
 import { Task, useGetTasksQuery, useUpdateTaskMutation } from "@/state/api";
 import { cn } from "@/lib/utils";
@@ -13,6 +13,19 @@ const BacklogView = ({ projectId }: Props) => {
   const { data: tasks, isLoading, isError } = useGetTasksQuery({ projectId });
   const [updateTask, { isLoading: isUpdating }] = useUpdateTaskMutation();
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
+  const [isLeader, setIsLeader] = useState(false);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("authUser");
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.role === "Project Leader" || parsed.role === "PROJECT_LEADER") {
+          setIsLeader(true);
+        }
+      } catch (e) {}
+    }
+  }, []);
 
   // Form State
   const [title, setTitle] = useState("");
@@ -169,13 +182,13 @@ const BacklogView = ({ projectId }: Props) => {
       <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm dark:border-stroke-dark dark:bg-dark-secondary flex flex-col justify-between">
         {selectedTask ? (
           <form onSubmit={handleSaveTriage} className="space-y-4 h-full flex flex-col justify-between">
-            <div className="space-y-4">
-              <div className="border-b border-gray-100 pb-3 dark:border-stroke-dark">
+            <fieldset disabled={!isLeader} className="space-y-4">
+              <div className="border-b border-gray-105 pb-3 dark:border-stroke-dark">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
                   Triage Panel
                 </h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                  Update scheduling for Task #{selectedTask.id}
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-medium">
+                  {isLeader ? `Update scheduling for Task #${selectedTask.id}` : `Viewing Task #${selectedTask.id} (Triage restricted to PM)`}
                 </p>
               </div>
 
@@ -276,7 +289,7 @@ const BacklogView = ({ projectId }: Props) => {
                   className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 outline-none transition-all focus:border-blue-500 focus:bg-white dark:border-stroke-dark dark:bg-dark-tertiary dark:text-gray-200 dark:focus:bg-dark-bg"
                 />
               </div>
-            </div>
+            </fieldset>
 
             <div className="flex justify-end gap-3 border-t border-gray-100 pt-4 mt-6 dark:border-stroke-dark">
               <button
@@ -288,7 +301,7 @@ const BacklogView = ({ projectId }: Props) => {
               </button>
               <button
                 type="submit"
-                disabled={isUpdating}
+                disabled={isUpdating || !isLeader}
                 className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 shadow-sm transition-colors disabled:opacity-50"
               >
                 {isUpdating ? (

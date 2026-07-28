@@ -17,6 +17,7 @@ import {
   ShieldAlert,
   AlertTriangle,
   Plus,
+  Code2,
 } from "lucide-react";
 import { useGetProjectsQuery } from "@/state/api";
 import ModalNewProject from "../ModalNewProject";
@@ -66,6 +67,11 @@ const Sidebar = () => {
       href: "/",
       label: "Dashboard",
       icon: LayoutDashboard,
+    },
+    {
+      href: "/developer",
+      label: "Developer Workspace",
+      icon: Code2,
     },
     {
       href: "/projects",

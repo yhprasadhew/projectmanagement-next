@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   LayoutGrid,
   List,
@@ -37,6 +37,20 @@ const ProjectHeader = ({
   setActiveTab,
   setIsModalNewTaskOpen,
 }: Props) => {
+  const [isLeader, setIsLeader] = useState(false);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("authUser");
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.role === "Project Leader" || parsed.role === "PROJECT_LEADER") {
+          setIsLeader(true);
+        }
+      } catch (e) {}
+    }
+  }, []);
+
   return (
     <div className="mb-6">
       <div className="mb-4 flex items-center justify-between">
@@ -71,14 +85,16 @@ const ProjectHeader = ({
             <span className="hidden sm:inline">Share</span>
           </button>
 
-          <button
-            className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
-            aria-label="Add new task"
-            onClick={() => setIsModalNewTaskOpen?.(true)}
-          >
-            <Plus className="h-4 w-4" />
-            <span>Add Task</span>
-          </button>
+          {isLeader && (
+            <button
+              className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm transition-colors hover:bg-blue-700"
+              aria-label="Add new task"
+              onClick={() => setIsModalNewTaskOpen?.(true)}
+            >
+              <Plus className="h-4 w-4" />
+              <span>Add Task</span>
+            </button>
+          )}
         </div>
       </div>
 

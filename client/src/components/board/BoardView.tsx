@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -34,10 +34,23 @@ const BoardView = ({ projectId }: Props) => {
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isModalNewTaskOpen, setIsModalNewTaskOpen] = useState(false);
+  const [isManager, setIsManager] = useState(false);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("authUser");
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.role === "Project Leader" || parsed.role === "PROJECT_LEADER") {
+          setIsManager(true);
+        }
+      } catch (e) {}
+    }
+  }, []);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: { distance: 8 },
+      activationConstraint: { distance: isManager ? 8 : 999999 },
     })
   );
 
@@ -115,7 +128,7 @@ const BoardView = ({ projectId }: Props) => {
               accent={column.accent}
               badge={column.badge}
               tasks={tasksByStatus[column.id]}
-              onAddTaskClick={column.id === "Todo" ? () => setIsModalNewTaskOpen(true) : undefined}
+              onAddTaskClick={column.id === "Todo" && isManager ? () => setIsModalNewTaskOpen(true) : undefined}
             />
           ))}
         </div>
