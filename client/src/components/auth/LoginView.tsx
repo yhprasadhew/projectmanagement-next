@@ -6,13 +6,13 @@ import { cn } from "@/lib/utils";
 
 // Mock users list matching seed data
 const MOCK_USERS = [
-  { username: "BobSmith", role: "Project Leader", email: "bobsmith@example.com", avatar: "B" },
-  { username: "AliceJones", role: "Developer", email: "alicejones@example.com", avatar: "A" },
-  { username: "CarolWhite", role: "Developer", email: "carolwhite@example.com", avatar: "C" },
+  { id: 2, username: "BobSmith", role: "Project Leader", email: "bobsmith@example.com", avatar: "B" },
+  { id: 1, username: "AliceJones", role: "Developer", email: "alicejones@example.com", avatar: "A" },
+  { id: 3, username: "CarolWhite", role: "Developer", email: "carolwhite@example.com", avatar: "C" },
 ];
 
 type Props = {
-  onLoginSuccess: (token: string, user: { username: string; email: string; role: string }) => void;
+  onLoginSuccess: (token: string, user: { id: number; username: string; email: string; role: string }) => void;
   isCognitoConfigured: boolean;
 };
 
@@ -60,12 +60,15 @@ export default function LoginView({ onLoginSuccess, isCognitoConfigured }: Props
         const mockToken = `mock-token-${matchedUser.username}`;
         localStorage.setItem("authToken", mockToken);
         localStorage.setItem("authUser", JSON.stringify({ 
+          id: matchedUser.id,
+          userId: matchedUser.id,
           username: matchedUser.username, 
           email: matchedUser.email, 
           role: matchedUser.role 
         }));
 
         onLoginSuccess(mockToken, { 
+          id: matchedUser.id,
           username: matchedUser.username, 
           email: matchedUser.email, 
           role: matchedUser.role 

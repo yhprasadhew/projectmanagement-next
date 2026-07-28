@@ -80,7 +80,9 @@ export default function DeveloperWorkspace() {
   // Filter tasks assigned to logged in user
   const assignedTasks = useMemo(() => {
     if (!tasks || !currentUser) return [];
+
     const currentId = currentUser.id || currentUser.userId;
+    if (currentId === undefined) return [];
     return tasks.filter(t => t.assignedUserId === currentId);
   }, [tasks, currentUser]);
 
