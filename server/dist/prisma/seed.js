@@ -62,7 +62,15 @@ async function main() {
     const userFilePath = path.join(dataDirectory, "user.json");
     const userData = JSON.parse(fs.readFileSync(userFilePath, "utf-8"));
     for (const user of userData) {
-        await prisma.user.create({ data: user });
+        const email = `${user.username.toLowerCase()}@example.com`;
+        const role = user.username === "BobSmith" ? "PROJECT_LEADER" : "USER";
+        await prisma.user.create({
+            data: {
+                ...user,
+                email,
+                role,
+            },
+        });
     }
     console.log("Seeded User");
     // 4. Seed ProjectTeam
@@ -111,7 +119,33 @@ async function main() {
         });
     }
     console.log("Updated Team circular references");
-    // 10. Reset identity sequences for all tables that were seeded with explicit IDs
+    // 10. Link users to projects based on ProjectTeam associations
+    const projectTeams = await prisma.projectTeam.findMany({
+        include: {
+            project: true,
+            team: {
+                include: {
+                    users: true,
+                },
+            },
+        },
+    });
+    for (const pt of projectTeams) {
+        if (pt.team?.users) {
+            for (const user of pt.team.users) {
+                await prisma.project.update({
+                    where: { id: pt.projectId },
+                    data: {
+                        members: {
+                            connect: { id: user.id },
+                        },
+                    },
+                });
+            }
+        }
+    }
+    console.log("Seeded project memberships based on teams");
+    // 11. Reset identity sequences for all tables that were seeded with explicit IDs
     console.log("Resetting identity sequences...");
     const tables = [
         "Team",

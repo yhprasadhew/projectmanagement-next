@@ -910,7 +910,10 @@ export declare const UserScalarFieldEnum: {
     readonly id: "id";
     readonly cognitoId: "cognitoId";
     readonly username: "username";
+    readonly email: "email";
     readonly profilePictureUrl: "profilePictureUrl";
+    readonly role: "role";
+    readonly position: "position";
     readonly teamId: "teamId";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";

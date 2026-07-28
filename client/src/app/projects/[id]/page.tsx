@@ -7,6 +7,7 @@ import ListView from "@/components/board/ListView";
 import TimelineView from "@/components/board/TimelineView";
 import TableView from "@/components/board/TableView";
 import BacklogView from "@/components/board/BacklogView";
+import ProjectMembersView from "@/components/board/ProjectMembersView";
 import { useGetProjectQuery } from "@/state/api";
 import { Loader2 } from "lucide-react";
 import ModalNewTask from "@/components/ModalNewTask";
@@ -69,6 +70,7 @@ const Page = ({ params }: Props) => {
       {activeTab === "Timeline" && <TimelineView projectId={projectId} />}
       {activeTab === "Table" && <TableView projectId={projectId} />}
       {activeTab === "Backlog" && <BacklogView projectId={projectId} />}
+      {activeTab === "Members" && <ProjectMembersView projectId={projectId} />}
 
       <ModalNewTask
         isOpen={isModalNewTaskOpen}

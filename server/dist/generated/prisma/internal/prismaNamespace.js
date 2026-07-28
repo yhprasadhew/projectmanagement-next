@@ -112,7 +112,10 @@ export const UserScalarFieldEnum = {
     id: 'id',
     cognitoId: 'cognitoId',
     username: 'username',
+    email: 'email',
     profilePictureUrl: 'profilePictureUrl',
+    role: 'role',
+    position: 'position',
     teamId: 'teamId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'

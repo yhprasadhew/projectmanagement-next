@@ -10,6 +10,7 @@ import {
   Plus,
   Share2,
   Filter,
+  Users,
 } from "lucide-react";
 import { Project } from "@/state/api";
 
@@ -27,6 +28,7 @@ const tabs = [
   { name: "Timeline", icon: BarChart2 },
   { name: "Table", icon: Table2 },
   { name: "Backlog", icon: AlignLeft },
+  { name: "Members", icon: Users },
 ];
 
 const ProjectHeader = ({

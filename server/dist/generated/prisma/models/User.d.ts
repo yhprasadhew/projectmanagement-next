@@ -24,7 +24,10 @@ export type UserMinAggregateOutputType = {
     id: number | null;
     cognitoId: string | null;
     username: string | null;
+    email: string | null;
     profilePictureUrl: string | null;
+    role: string | null;
+    position: string | null;
     teamId: number | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -33,7 +36,10 @@ export type UserMaxAggregateOutputType = {
     id: number | null;
     cognitoId: string | null;
     username: string | null;
+    email: string | null;
     profilePictureUrl: string | null;
+    role: string | null;
+    position: string | null;
     teamId: number | null;
     createdAt: Date | null;
     updatedAt: Date | null;
@@ -42,7 +48,10 @@ export type UserCountAggregateOutputType = {
     id: number;
     cognitoId: number;
     username: number;
+    email: number;
     profilePictureUrl: number;
+    role: number;
+    position: number;
     teamId: number;
     createdAt: number;
     updatedAt: number;
@@ -60,7 +69,10 @@ export type UserMinAggregateInputType = {
     id?: true;
     cognitoId?: true;
     username?: true;
+    email?: true;
     profilePictureUrl?: true;
+    role?: true;
+    position?: true;
     teamId?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -69,7 +81,10 @@ export type UserMaxAggregateInputType = {
     id?: true;
     cognitoId?: true;
     username?: true;
+    email?: true;
     profilePictureUrl?: true;
+    role?: true;
+    position?: true;
     teamId?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -78,7 +93,10 @@ export type UserCountAggregateInputType = {
     id?: true;
     cognitoId?: true;
     username?: true;
+    email?: true;
     profilePictureUrl?: true;
+    role?: true;
+    position?: true;
     teamId?: true;
     createdAt?: true;
     updatedAt?: true;
@@ -164,7 +182,10 @@ export type UserGroupByOutputType = {
     id: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl: string | null;
+    role: string;
+    position: string | null;
     teamId: number | null;
     createdAt: Date;
     updatedAt: Date;
@@ -184,7 +205,10 @@ export type UserWhereInput = {
     id?: Prisma.IntFilter<"User"> | number;
     cognitoId?: Prisma.StringFilter<"User"> | string;
     username?: Prisma.StringFilter<"User"> | string;
+    email?: Prisma.StringFilter<"User"> | string;
     profilePictureUrl?: Prisma.StringNullableFilter<"User"> | string | null;
+    role?: Prisma.StringFilter<"User"> | string;
+    position?: Prisma.StringNullableFilter<"User"> | string | null;
     teamId?: Prisma.IntNullableFilter<"User"> | number | null;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
@@ -196,12 +220,16 @@ export type UserWhereInput = {
     taskAssignments?: Prisma.TaskAssignmentListRelationFilter;
     productOwnerTeams?: Prisma.TeamListRelationFilter;
     projectManagerTeams?: Prisma.TeamListRelationFilter;
+    projects?: Prisma.ProjectListRelationFilter;
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
     cognitoId?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
+    email?: Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
+    role?: Prisma.SortOrder;
+    position?: Prisma.SortOrderInput | Prisma.SortOrder;
     teamId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -213,15 +241,19 @@ export type UserOrderByWithRelationInput = {
     taskAssignments?: Prisma.TaskAssignmentOrderByRelationAggregateInput;
     productOwnerTeams?: Prisma.TeamOrderByRelationAggregateInput;
     projectManagerTeams?: Prisma.TeamOrderByRelationAggregateInput;
+    projects?: Prisma.ProjectOrderByRelationAggregateInput;
 };
 export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number;
     cognitoId?: string;
     username?: string;
+    email?: string;
     AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     OR?: Prisma.UserWhereInput[];
     NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     profilePictureUrl?: Prisma.StringNullableFilter<"User"> | string | null;
+    role?: Prisma.StringFilter<"User"> | string;
+    position?: Prisma.StringNullableFilter<"User"> | string | null;
     teamId?: Prisma.IntNullableFilter<"User"> | number | null;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
@@ -233,12 +265,16 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     taskAssignments?: Prisma.TaskAssignmentListRelationFilter;
     productOwnerTeams?: Prisma.TeamListRelationFilter;
     projectManagerTeams?: Prisma.TeamListRelationFilter;
-}, "id" | "cognitoId" | "username">;
+    projects?: Prisma.ProjectListRelationFilter;
+}, "id" | "cognitoId" | "username" | "email">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
     cognitoId?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
+    email?: Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
+    role?: Prisma.SortOrder;
+    position?: Prisma.SortOrderInput | Prisma.SortOrder;
     teamId?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -255,7 +291,10 @@ export type UserScalarWhereWithAggregatesInput = {
     id?: Prisma.IntWithAggregatesFilter<"User"> | number;
     cognitoId?: Prisma.StringWithAggregatesFilter<"User"> | string;
     username?: Prisma.StringWithAggregatesFilter<"User"> | string;
+    email?: Prisma.StringWithAggregatesFilter<"User"> | string;
     profilePictureUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+    role?: Prisma.StringWithAggregatesFilter<"User"> | string;
+    position?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
     teamId?: Prisma.IntNullableWithAggregatesFilter<"User"> | number | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
@@ -263,7 +302,10 @@ export type UserScalarWhereWithAggregatesInput = {
 export type UserCreateInput = {
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     team?: Prisma.TeamCreateNestedOneWithoutUsersInput;
@@ -274,12 +316,16 @@ export type UserCreateInput = {
     taskAssignments?: Prisma.TaskAssignmentCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectCreateNestedManyWithoutMembersInput;
 };
 export type UserUncheckedCreateInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     teamId?: number | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -290,11 +336,15 @@ export type UserUncheckedCreateInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserUpdateInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     team?: Prisma.TeamUpdateOneWithoutUsersNestedInput;
@@ -305,12 +355,16 @@ export type UserUpdateInput = {
     taskAssignments?: Prisma.TaskAssignmentUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUpdateManyWithoutMembersNestedInput;
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -321,12 +375,16 @@ export type UserUncheckedUpdateInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserCreateManyInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     teamId?: number | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -334,7 +392,10 @@ export type UserCreateManyInput = {
 export type UserUpdateManyMutationInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -342,7 +403,10 @@ export type UserUncheckedUpdateManyInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -363,7 +427,10 @@ export type UserCountOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     cognitoId?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
+    email?: Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrder;
+    role?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
     teamId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -376,7 +443,10 @@ export type UserMaxOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     cognitoId?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
+    email?: Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrder;
+    role?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
     teamId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -385,7 +455,10 @@ export type UserMinOrderByAggregateInput = {
     id?: Prisma.SortOrder;
     cognitoId?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
+    email?: Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrder;
+    role?: Prisma.SortOrder;
+    position?: Prisma.SortOrder;
     teamId?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
@@ -464,6 +537,40 @@ export type UserUncheckedUpdateManyWithoutTeamNestedInput = {
     updateMany?: Prisma.UserUpdateManyWithWhereWithoutTeamInput | Prisma.UserUpdateManyWithWhereWithoutTeamInput[];
     deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
 };
+export type UserCreateNestedManyWithoutProjectsInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput> | Prisma.UserCreateWithoutProjectsInput[] | Prisma.UserUncheckedCreateWithoutProjectsInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsInput | Prisma.UserCreateOrConnectWithoutProjectsInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+};
+export type UserUncheckedCreateNestedManyWithoutProjectsInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput> | Prisma.UserCreateWithoutProjectsInput[] | Prisma.UserUncheckedCreateWithoutProjectsInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsInput | Prisma.UserCreateOrConnectWithoutProjectsInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+};
+export type UserUpdateManyWithoutProjectsNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput> | Prisma.UserCreateWithoutProjectsInput[] | Prisma.UserUncheckedCreateWithoutProjectsInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsInput | Prisma.UserCreateOrConnectWithoutProjectsInput[];
+    upsert?: Prisma.UserUpsertWithWhereUniqueWithoutProjectsInput | Prisma.UserUpsertWithWhereUniqueWithoutProjectsInput[];
+    set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    update?: Prisma.UserUpdateWithWhereUniqueWithoutProjectsInput | Prisma.UserUpdateWithWhereUniqueWithoutProjectsInput[];
+    updateMany?: Prisma.UserUpdateManyWithWhereWithoutProjectsInput | Prisma.UserUpdateManyWithWhereWithoutProjectsInput[];
+    deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
+};
+export type UserUncheckedUpdateManyWithoutProjectsNestedInput = {
+    create?: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput> | Prisma.UserCreateWithoutProjectsInput[] | Prisma.UserUncheckedCreateWithoutProjectsInput[];
+    connectOrCreate?: Prisma.UserCreateOrConnectWithoutProjectsInput | Prisma.UserCreateOrConnectWithoutProjectsInput[];
+    upsert?: Prisma.UserUpsertWithWhereUniqueWithoutProjectsInput | Prisma.UserUpsertWithWhereUniqueWithoutProjectsInput[];
+    set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[];
+    update?: Prisma.UserUpdateWithWhereUniqueWithoutProjectsInput | Prisma.UserUpdateWithWhereUniqueWithoutProjectsInput[];
+    updateMany?: Prisma.UserUpdateManyWithWhereWithoutProjectsInput | Prisma.UserUpdateManyWithWhereWithoutProjectsInput[];
+    deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
+};
 export type UserCreateNestedOneWithoutAuthoredTasksInput = {
     create?: Prisma.XOR<Prisma.UserCreateWithoutAuthoredTasksInput, Prisma.UserUncheckedCreateWithoutAuthoredTasksInput>;
     connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthoredTasksInput;
@@ -531,7 +638,10 @@ export type UserUpdateOneRequiredWithoutTaskAssignmentsNestedInput = {
 export type UserCreateWithoutProductOwnerTeamsInput = {
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     team?: Prisma.TeamCreateNestedOneWithoutUsersInput;
@@ -541,12 +651,16 @@ export type UserCreateWithoutProductOwnerTeamsInput = {
     attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput;
     taskAssignments?: Prisma.TaskAssignmentCreateNestedManyWithoutUserInput;
     projectManagerTeams?: Prisma.TeamCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectCreateNestedManyWithoutMembersInput;
 };
 export type UserUncheckedCreateWithoutProductOwnerTeamsInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     teamId?: number | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -556,6 +670,7 @@ export type UserUncheckedCreateWithoutProductOwnerTeamsInput = {
     attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput;
     taskAssignments?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutUserInput;
     projectManagerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserCreateOrConnectWithoutProductOwnerTeamsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -564,7 +679,10 @@ export type UserCreateOrConnectWithoutProductOwnerTeamsInput = {
 export type UserCreateWithoutProjectManagerTeamsInput = {
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     team?: Prisma.TeamCreateNestedOneWithoutUsersInput;
@@ -574,12 +692,16 @@ export type UserCreateWithoutProjectManagerTeamsInput = {
     attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput;
     taskAssignments?: Prisma.TaskAssignmentCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamCreateNestedManyWithoutProductOwnerInput;
+    projects?: Prisma.ProjectCreateNestedManyWithoutMembersInput;
 };
 export type UserUncheckedCreateWithoutProjectManagerTeamsInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     teamId?: number | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -589,6 +711,7 @@ export type UserUncheckedCreateWithoutProjectManagerTeamsInput = {
     attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput;
     taskAssignments?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProductOwnerInput;
+    projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserCreateOrConnectWithoutProjectManagerTeamsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -597,7 +720,10 @@ export type UserCreateOrConnectWithoutProjectManagerTeamsInput = {
 export type UserCreateWithoutTeamInput = {
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     authoredTasks?: Prisma.TaskCreateNestedManyWithoutAuthorInput;
@@ -607,12 +733,16 @@ export type UserCreateWithoutTeamInput = {
     taskAssignments?: Prisma.TaskAssignmentCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectCreateNestedManyWithoutMembersInput;
 };
 export type UserUncheckedCreateWithoutTeamInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     authoredTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAuthorInput;
@@ -622,6 +752,7 @@ export type UserUncheckedCreateWithoutTeamInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserCreateOrConnectWithoutTeamInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -643,7 +774,10 @@ export type UserUpdateToOneWithWhereWithoutProductOwnerTeamsInput = {
 export type UserUpdateWithoutProductOwnerTeamsInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     team?: Prisma.TeamUpdateOneWithoutUsersNestedInput;
@@ -653,12 +787,16 @@ export type UserUpdateWithoutProductOwnerTeamsInput = {
     attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput;
     taskAssignments?: Prisma.TaskAssignmentUpdateManyWithoutUserNestedInput;
     projectManagerTeams?: Prisma.TeamUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUpdateManyWithoutMembersNestedInput;
 };
 export type UserUncheckedUpdateWithoutProductOwnerTeamsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -668,6 +806,7 @@ export type UserUncheckedUpdateWithoutProductOwnerTeamsInput = {
     attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput;
     taskAssignments?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput;
     projectManagerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserUpsertWithoutProjectManagerTeamsInput = {
     update: Prisma.XOR<Prisma.UserUpdateWithoutProjectManagerTeamsInput, Prisma.UserUncheckedUpdateWithoutProjectManagerTeamsInput>;
@@ -681,7 +820,10 @@ export type UserUpdateToOneWithWhereWithoutProjectManagerTeamsInput = {
 export type UserUpdateWithoutProjectManagerTeamsInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     team?: Prisma.TeamUpdateOneWithoutUsersNestedInput;
@@ -691,12 +833,16 @@ export type UserUpdateWithoutProjectManagerTeamsInput = {
     attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput;
     taskAssignments?: Prisma.TaskAssignmentUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUpdateManyWithoutProductOwnerNestedInput;
+    projects?: Prisma.ProjectUpdateManyWithoutMembersNestedInput;
 };
 export type UserUncheckedUpdateWithoutProjectManagerTeamsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -706,6 +852,7 @@ export type UserUncheckedUpdateWithoutProjectManagerTeamsInput = {
     attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput;
     taskAssignments?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProductOwnerNestedInput;
+    projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserUpsertWithWhereUniqueWithoutTeamInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -727,15 +874,75 @@ export type UserScalarWhereInput = {
     id?: Prisma.IntFilter<"User"> | number;
     cognitoId?: Prisma.StringFilter<"User"> | string;
     username?: Prisma.StringFilter<"User"> | string;
+    email?: Prisma.StringFilter<"User"> | string;
     profilePictureUrl?: Prisma.StringNullableFilter<"User"> | string | null;
+    role?: Prisma.StringFilter<"User"> | string;
+    position?: Prisma.StringNullableFilter<"User"> | string | null;
     teamId?: Prisma.IntNullableFilter<"User"> | number | null;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
 };
+export type UserCreateWithoutProjectsInput = {
+    cognitoId: string;
+    username: string;
+    email: string;
+    profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    team?: Prisma.TeamCreateNestedOneWithoutUsersInput;
+    authoredTasks?: Prisma.TaskCreateNestedManyWithoutAuthorInput;
+    assignedTasks?: Prisma.TaskCreateNestedManyWithoutAssigneeInput;
+    comments?: Prisma.CommentCreateNestedManyWithoutUserInput;
+    attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput;
+    taskAssignments?: Prisma.TaskAssignmentCreateNestedManyWithoutUserInput;
+    productOwnerTeams?: Prisma.TeamCreateNestedManyWithoutProductOwnerInput;
+    projectManagerTeams?: Prisma.TeamCreateNestedManyWithoutProjectManagerInput;
+};
+export type UserUncheckedCreateWithoutProjectsInput = {
+    id?: number;
+    cognitoId: string;
+    username: string;
+    email: string;
+    profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
+    teamId?: number | null;
+    createdAt?: Date | string;
+    updatedAt?: Date | string;
+    authoredTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAuthorInput;
+    assignedTasks?: Prisma.TaskUncheckedCreateNestedManyWithoutAssigneeInput;
+    comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput;
+    attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput;
+    taskAssignments?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutUserInput;
+    productOwnerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProductOwnerInput;
+    projectManagerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProjectManagerInput;
+};
+export type UserCreateOrConnectWithoutProjectsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    create: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>;
+};
+export type UserUpsertWithWhereUniqueWithoutProjectsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    update: Prisma.XOR<Prisma.UserUpdateWithoutProjectsInput, Prisma.UserUncheckedUpdateWithoutProjectsInput>;
+    create: Prisma.XOR<Prisma.UserCreateWithoutProjectsInput, Prisma.UserUncheckedCreateWithoutProjectsInput>;
+};
+export type UserUpdateWithWhereUniqueWithoutProjectsInput = {
+    where: Prisma.UserWhereUniqueInput;
+    data: Prisma.XOR<Prisma.UserUpdateWithoutProjectsInput, Prisma.UserUncheckedUpdateWithoutProjectsInput>;
+};
+export type UserUpdateManyWithWhereWithoutProjectsInput = {
+    where: Prisma.UserScalarWhereInput;
+    data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutProjectsInput>;
+};
 export type UserCreateWithoutAuthoredTasksInput = {
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     team?: Prisma.TeamCreateNestedOneWithoutUsersInput;
@@ -745,12 +952,16 @@ export type UserCreateWithoutAuthoredTasksInput = {
     taskAssignments?: Prisma.TaskAssignmentCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectCreateNestedManyWithoutMembersInput;
 };
 export type UserUncheckedCreateWithoutAuthoredTasksInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     teamId?: number | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -760,6 +971,7 @@ export type UserUncheckedCreateWithoutAuthoredTasksInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserCreateOrConnectWithoutAuthoredTasksInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -768,7 +980,10 @@ export type UserCreateOrConnectWithoutAuthoredTasksInput = {
 export type UserCreateWithoutAssignedTasksInput = {
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     team?: Prisma.TeamCreateNestedOneWithoutUsersInput;
@@ -778,12 +993,16 @@ export type UserCreateWithoutAssignedTasksInput = {
     taskAssignments?: Prisma.TaskAssignmentCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectCreateNestedManyWithoutMembersInput;
 };
 export type UserUncheckedCreateWithoutAssignedTasksInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     teamId?: number | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -793,6 +1012,7 @@ export type UserUncheckedCreateWithoutAssignedTasksInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserCreateOrConnectWithoutAssignedTasksInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -810,7 +1030,10 @@ export type UserUpdateToOneWithWhereWithoutAuthoredTasksInput = {
 export type UserUpdateWithoutAuthoredTasksInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     team?: Prisma.TeamUpdateOneWithoutUsersNestedInput;
@@ -820,12 +1043,16 @@ export type UserUpdateWithoutAuthoredTasksInput = {
     taskAssignments?: Prisma.TaskAssignmentUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUpdateManyWithoutMembersNestedInput;
 };
 export type UserUncheckedUpdateWithoutAuthoredTasksInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -835,6 +1062,7 @@ export type UserUncheckedUpdateWithoutAuthoredTasksInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserUpsertWithoutAssignedTasksInput = {
     update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTasksInput, Prisma.UserUncheckedUpdateWithoutAssignedTasksInput>;
@@ -848,7 +1076,10 @@ export type UserUpdateToOneWithWhereWithoutAssignedTasksInput = {
 export type UserUpdateWithoutAssignedTasksInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     team?: Prisma.TeamUpdateOneWithoutUsersNestedInput;
@@ -858,12 +1089,16 @@ export type UserUpdateWithoutAssignedTasksInput = {
     taskAssignments?: Prisma.TaskAssignmentUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUpdateManyWithoutMembersNestedInput;
 };
 export type UserUncheckedUpdateWithoutAssignedTasksInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -873,11 +1108,15 @@ export type UserUncheckedUpdateWithoutAssignedTasksInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserCreateWithoutAttachmentsInput = {
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     team?: Prisma.TeamCreateNestedOneWithoutUsersInput;
@@ -887,12 +1126,16 @@ export type UserCreateWithoutAttachmentsInput = {
     taskAssignments?: Prisma.TaskAssignmentCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectCreateNestedManyWithoutMembersInput;
 };
 export type UserUncheckedCreateWithoutAttachmentsInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     teamId?: number | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -902,6 +1145,7 @@ export type UserUncheckedCreateWithoutAttachmentsInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserCreateOrConnectWithoutAttachmentsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -919,7 +1163,10 @@ export type UserUpdateToOneWithWhereWithoutAttachmentsInput = {
 export type UserUpdateWithoutAttachmentsInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     team?: Prisma.TeamUpdateOneWithoutUsersNestedInput;
@@ -929,12 +1176,16 @@ export type UserUpdateWithoutAttachmentsInput = {
     taskAssignments?: Prisma.TaskAssignmentUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUpdateManyWithoutMembersNestedInput;
 };
 export type UserUncheckedUpdateWithoutAttachmentsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -944,11 +1195,15 @@ export type UserUncheckedUpdateWithoutAttachmentsInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserCreateWithoutCommentsInput = {
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     team?: Prisma.TeamCreateNestedOneWithoutUsersInput;
@@ -958,12 +1213,16 @@ export type UserCreateWithoutCommentsInput = {
     taskAssignments?: Prisma.TaskAssignmentCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectCreateNestedManyWithoutMembersInput;
 };
 export type UserUncheckedCreateWithoutCommentsInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     teamId?: number | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -973,6 +1232,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedCreateNestedManyWithoutUserInput;
     productOwnerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserCreateOrConnectWithoutCommentsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -990,7 +1250,10 @@ export type UserUpdateToOneWithWhereWithoutCommentsInput = {
 export type UserUpdateWithoutCommentsInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     team?: Prisma.TeamUpdateOneWithoutUsersNestedInput;
@@ -1000,12 +1263,16 @@ export type UserUpdateWithoutCommentsInput = {
     taskAssignments?: Prisma.TaskAssignmentUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUpdateManyWithoutMembersNestedInput;
 };
 export type UserUncheckedUpdateWithoutCommentsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1015,11 +1282,15 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
     taskAssignments?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserCreateWithoutTaskAssignmentsInput = {
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     team?: Prisma.TeamCreateNestedOneWithoutUsersInput;
@@ -1029,12 +1300,16 @@ export type UserCreateWithoutTaskAssignmentsInput = {
     attachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput;
     productOwnerTeams?: Prisma.TeamCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectCreateNestedManyWithoutMembersInput;
 };
 export type UserUncheckedCreateWithoutTaskAssignmentsInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     teamId?: number | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
@@ -1044,6 +1319,7 @@ export type UserUncheckedCreateWithoutTaskAssignmentsInput = {
     attachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput;
     productOwnerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProductOwnerInput;
     projectManagerTeams?: Prisma.TeamUncheckedCreateNestedManyWithoutProjectManagerInput;
+    projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserCreateOrConnectWithoutTaskAssignmentsInput = {
     where: Prisma.UserWhereUniqueInput;
@@ -1061,7 +1337,10 @@ export type UserUpdateToOneWithWhereWithoutTaskAssignmentsInput = {
 export type UserUpdateWithoutTaskAssignmentsInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     team?: Prisma.TeamUpdateOneWithoutUsersNestedInput;
@@ -1071,12 +1350,16 @@ export type UserUpdateWithoutTaskAssignmentsInput = {
     attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput;
     productOwnerTeams?: Prisma.TeamUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUpdateManyWithoutMembersNestedInput;
 };
 export type UserUncheckedUpdateWithoutTaskAssignmentsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
@@ -1086,19 +1369,26 @@ export type UserUncheckedUpdateWithoutTaskAssignmentsInput = {
     attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput;
     productOwnerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserCreateManyTeamInput = {
     id?: number;
     cognitoId: string;
     username: string;
+    email: string;
     profilePictureUrl?: string | null;
+    role?: string;
+    position?: string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
 export type UserUpdateWithoutTeamInput = {
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     authoredTasks?: Prisma.TaskUpdateManyWithoutAuthorNestedInput;
@@ -1108,12 +1398,65 @@ export type UserUpdateWithoutTeamInput = {
     taskAssignments?: Prisma.TaskAssignmentUpdateManyWithoutUserNestedInput;
     productOwnerTeams?: Prisma.TeamUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUpdateManyWithoutMembersNestedInput;
 };
 export type UserUncheckedUpdateWithoutTeamInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    authoredTasks?: Prisma.TaskUncheckedUpdateManyWithoutAuthorNestedInput;
+    assignedTasks?: Prisma.TaskUncheckedUpdateManyWithoutAssigneeNestedInput;
+    comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput;
+    attachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput;
+    taskAssignments?: Prisma.TaskAssignmentUncheckedUpdateManyWithoutUserNestedInput;
+    productOwnerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProductOwnerNestedInput;
+    projectManagerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProjectManagerNestedInput;
+    projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
+};
+export type UserUncheckedUpdateManyWithoutTeamInput = {
+    id?: Prisma.IntFieldUpdateOperationsInput | number;
+    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+};
+export type UserUpdateWithoutProjectsInput = {
+    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
+    team?: Prisma.TeamUpdateOneWithoutUsersNestedInput;
+    authoredTasks?: Prisma.TaskUpdateManyWithoutAuthorNestedInput;
+    assignedTasks?: Prisma.TaskUpdateManyWithoutAssigneeNestedInput;
+    comments?: Prisma.CommentUpdateManyWithoutUserNestedInput;
+    attachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput;
+    taskAssignments?: Prisma.TaskAssignmentUpdateManyWithoutUserNestedInput;
+    productOwnerTeams?: Prisma.TeamUpdateManyWithoutProductOwnerNestedInput;
+    projectManagerTeams?: Prisma.TeamUpdateManyWithoutProjectManagerNestedInput;
+};
+export type UserUncheckedUpdateWithoutProjectsInput = {
+    id?: Prisma.IntFieldUpdateOperationsInput | number;
+    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
+    profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     authoredTasks?: Prisma.TaskUncheckedUpdateManyWithoutAuthorNestedInput;
@@ -1124,11 +1467,15 @@ export type UserUncheckedUpdateWithoutTeamInput = {
     productOwnerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProductOwnerNestedInput;
     projectManagerTeams?: Prisma.TeamUncheckedUpdateManyWithoutProjectManagerNestedInput;
 };
-export type UserUncheckedUpdateManyWithoutTeamInput = {
+export type UserUncheckedUpdateManyWithoutProjectsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
     cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
+    email?: Prisma.StringFieldUpdateOperationsInput | string;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    role?: Prisma.StringFieldUpdateOperationsInput | string;
+    position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    teamId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -1143,6 +1490,7 @@ export type UserCountOutputType = {
     taskAssignments: number;
     productOwnerTeams: number;
     projectManagerTeams: number;
+    projects: number;
 };
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     authoredTasks?: boolean | UserCountOutputTypeCountAuthoredTasksArgs;
@@ -1152,6 +1500,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
     taskAssignments?: boolean | UserCountOutputTypeCountTaskAssignmentsArgs;
     productOwnerTeams?: boolean | UserCountOutputTypeCountProductOwnerTeamsArgs;
     projectManagerTeams?: boolean | UserCountOutputTypeCountProjectManagerTeamsArgs;
+    projects?: boolean | UserCountOutputTypeCountProjectsArgs;
 };
 /**
  * UserCountOutputType without action
@@ -1204,11 +1553,20 @@ export type UserCountOutputTypeCountProductOwnerTeamsArgs<ExtArgs extends runtim
 export type UserCountOutputTypeCountProjectManagerTeamsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     where?: Prisma.TeamWhereInput;
 };
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountProjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.ProjectWhereInput;
+};
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     cognitoId?: boolean;
     username?: boolean;
+    email?: boolean;
     profilePictureUrl?: boolean;
+    role?: boolean;
+    position?: boolean;
     teamId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -1220,13 +1578,17 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     taskAssignments?: boolean | Prisma.User$taskAssignmentsArgs<ExtArgs>;
     productOwnerTeams?: boolean | Prisma.User$productOwnerTeamsArgs<ExtArgs>;
     projectManagerTeams?: boolean | Prisma.User$projectManagerTeamsArgs<ExtArgs>;
+    projects?: boolean | Prisma.User$projectsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 }, ExtArgs["result"]["user"]>;
 export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
     id?: boolean;
     cognitoId?: boolean;
     username?: boolean;
+    email?: boolean;
     profilePictureUrl?: boolean;
+    role?: boolean;
+    position?: boolean;
     teamId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -1236,7 +1598,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     id?: boolean;
     cognitoId?: boolean;
     username?: boolean;
+    email?: boolean;
     profilePictureUrl?: boolean;
+    role?: boolean;
+    position?: boolean;
     teamId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
@@ -1246,12 +1611,15 @@ export type UserSelectScalar = {
     id?: boolean;
     cognitoId?: boolean;
     username?: boolean;
+    email?: boolean;
     profilePictureUrl?: boolean;
+    role?: boolean;
+    position?: boolean;
     teamId?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cognitoId" | "username" | "profilePictureUrl" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>;
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cognitoId" | "username" | "email" | "profilePictureUrl" | "role" | "position" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>;
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     team?: boolean | Prisma.User$teamArgs<ExtArgs>;
     authoredTasks?: boolean | Prisma.User$authoredTasksArgs<ExtArgs>;
@@ -1261,6 +1629,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     taskAssignments?: boolean | Prisma.User$taskAssignmentsArgs<ExtArgs>;
     productOwnerTeams?: boolean | Prisma.User$productOwnerTeamsArgs<ExtArgs>;
     projectManagerTeams?: boolean | Prisma.User$projectManagerTeamsArgs<ExtArgs>;
+    projects?: boolean | Prisma.User$projectsArgs<ExtArgs>;
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>;
 };
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1280,12 +1649,16 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         taskAssignments: Prisma.$TaskAssignmentPayload<ExtArgs>[];
         productOwnerTeams: Prisma.$TeamPayload<ExtArgs>[];
         projectManagerTeams: Prisma.$TeamPayload<ExtArgs>[];
+        projects: Prisma.$ProjectPayload<ExtArgs>[];
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: number;
         cognitoId: string;
         username: string;
+        email: string;
         profilePictureUrl: string | null;
+        role: string;
+        position: string | null;
         teamId: number | null;
         createdAt: Date;
         updatedAt: Date;
@@ -1626,6 +1999,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
     taskAssignments<T extends Prisma.User$taskAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$taskAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     productOwnerTeams<T extends Prisma.User$productOwnerTeamsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$productOwnerTeamsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     projectManagerTeams<T extends Prisma.User$projectManagerTeamsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectManagerTeamsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    projects<T extends Prisma.User$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1654,7 +2028,10 @@ export interface UserFieldRefs {
     readonly id: Prisma.FieldRef<"User", 'Int'>;
     readonly cognitoId: Prisma.FieldRef<"User", 'String'>;
     readonly username: Prisma.FieldRef<"User", 'String'>;
+    readonly email: Prisma.FieldRef<"User", 'String'>;
     readonly profilePictureUrl: Prisma.FieldRef<"User", 'String'>;
+    readonly role: Prisma.FieldRef<"User", 'String'>;
+    readonly position: Prisma.FieldRef<"User", 'String'>;
     readonly teamId: Prisma.FieldRef<"User", 'Int'>;
     readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>;
@@ -2219,6 +2596,29 @@ export type User$projectManagerTeamsArgs<ExtArgs extends runtime.Types.Extension
     take?: number;
     skip?: number;
     distinct?: Prisma.TeamScalarFieldEnum | Prisma.TeamScalarFieldEnum[];
+};
+/**
+ * User.projects
+ */
+export type User$projectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Project
+     */
+    select?: Prisma.ProjectSelect<ExtArgs> | null;
+    /**
+     * Omit specific fields from the Project
+     */
+    omit?: Prisma.ProjectOmit<ExtArgs> | null;
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: Prisma.ProjectInclude<ExtArgs> | null;
+    where?: Prisma.ProjectWhereInput;
+    orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[];
+    cursor?: Prisma.ProjectWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[];
 };
 /**
  * User without action

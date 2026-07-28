@@ -16,6 +16,8 @@ export interface User {
   profilePictureUrl?: string;
   cognitoId?: string;
   teamId?: number;
+  role?: string;
+  position?: string;
 }
 
 export interface Attachment {
@@ -68,6 +70,25 @@ export const api = createApi({
 
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+    prepareHeaders: async (headers) => {
+      try {
+        const { fetchAuthSession } = await import("aws-amplify/auth");
+        const session = await fetchAuthSession();
+        const token = session.tokens?.idToken?.toString();
+        if (token) {
+          headers.set("authorization", `Bearer ${token}`);
+          return headers;
+        }
+      } catch (e) {
+        // Fallback if Amplify is not configured/authenticated yet
+      }
+
+      const localToken = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+      if (localToken) {
+        headers.set("authorization", `Bearer ${localToken}`);
+      }
+      return headers;
+    },
   }),
 
   tagTypes: ["Projects", "Tasks", "Users", "Teams"],
@@ -186,6 +207,25 @@ export const api = createApi({
             ]
           : [{ type: "Tasks", id: "LIST" }],
     }),
+
+    getProjectMembers: builder.query<User[], number>({
+      query: (projectId) => `projects/${projectId}/members`,
+      providesTags: (result, error, projectId) => [{ type: "Users", id: `MEMBERS-${projectId}` }],
+    }),
+
+    addProjectMember: builder.mutation<
+      User,
+      { projectId: number; email: string; username: string; position?: string }
+    >({
+      query: ({ projectId, email, username, position }) => ({
+        url: `projects/${projectId}/members`,
+        method: "POST",
+        body: { email, username, position },
+      }),
+      invalidatesTags: (result, error, { projectId }) => [
+        { type: "Users", id: `MEMBERS-${projectId}` },
+      ],
+    }),
   }),
 });
 
@@ -200,6 +240,8 @@ export const {
   useDeleteProjectMutation,
   useUpdateTaskMutation,
   useGetTasksGlobalQuery,
+  useGetProjectMembersQuery,
+  useAddProjectMemberMutation,
 } = api;
 
 //

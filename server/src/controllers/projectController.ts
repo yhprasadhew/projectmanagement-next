@@ -1,12 +1,30 @@
 import type { Request, Response } from "express";
 import { prisma } from "../prisma.js";
+import crypto from "crypto";
 
 export const getProjects = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const user = (req as any).user;
+
   try {
-    const projects = await prisma.project.findMany();
+    let projects;
+    if (user && user.role === "PROJECT_LEADER") {
+      projects = await prisma.project.findMany();
+    } else if (user) {
+      projects = await prisma.project.findMany({
+        where: {
+          members: {
+            some: {
+              id: user.userId,
+            },
+          },
+        },
+      });
+    } else {
+      projects = await prisma.project.findMany();
+    }
     res.json(projects);
   } catch (error) {
     console.error(error);
@@ -46,6 +64,7 @@ export const createProject = async (
   res: Response
 ): Promise<void> => {
   const { name, description, startDate, endDate } = req.body;
+  const user = (req as any).user;
 
   try {
     const newProject = await prisma.project.create({
@@ -54,6 +73,11 @@ export const createProject = async (
         description,
         ...(startDate && { startDate: new Date(startDate) }),
         ...(endDate && { endDate: new Date(endDate) }),
+        members: user
+          ? {
+              connect: { id: user.userId },
+            }
+          : undefined,
       },
     });
 
@@ -119,5 +143,82 @@ export const deleteProject = async (
     res.status(500).json({
       message: "Error deleting project",
     });
+  }
+};
+
+export const addProjectMember = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { projectId } = req.params;
+  const { email, username, position } = req.body;
+
+  try {
+    const projId = Number(projectId);
+
+    // 1. Check if user already exists
+    let user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      // Create a new user profile with a temporary cognitoId
+      user = await prisma.user.create({
+        data: {
+          cognitoId: `temp-${crypto.randomUUID()}`,
+          username: username || email.split("@")[0],
+          email,
+          role: "USER",
+          position: position || "Developer",
+        },
+      });
+    } else if (position) {
+      // Update position for existing user
+      user = await prisma.user.update({
+        where: { id: user.id },
+        data: { position },
+      });
+    }
+
+    // 2. Connect user to project members
+    await prisma.project.update({
+      where: { id: projId },
+      data: {
+        members: {
+          connect: { id: user.id },
+        },
+      },
+    });
+
+    res.status(200).json({ message: "Member added to project successfully", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error adding member to project" });
+  }
+};
+
+export const getProjectMembers = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { projectId } = req.params;
+
+  try {
+    const project = await prisma.project.findUnique({
+      where: { id: Number(projectId) },
+      include: {
+        members: true,
+      },
+    });
+
+    if (!project) {
+      res.status(404).json({ message: "Project not found" });
+      return;
+    }
+
+    res.json(project.members);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error retrieving project members" });
   }
 };
