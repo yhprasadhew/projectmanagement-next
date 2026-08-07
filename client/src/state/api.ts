@@ -74,19 +74,7 @@ export const api = createApi({
 
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
-    prepareHeaders: async (headers) => {
-      try {
-        const { fetchAuthSession } = await import("aws-amplify/auth");
-        const session = await fetchAuthSession();
-        const token = session.tokens?.idToken?.toString();
-        if (token) {
-          headers.set("authorization", `Bearer ${token}`);
-          return headers;
-        }
-      } catch (e) {
-        // Fallback if Amplify is not configured/authenticated yet
-      }
-
+    prepareHeaders: (headers) => {
       const localToken = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
       if (localToken) {
         headers.set("authorization", `Bearer ${localToken}`);
@@ -274,6 +262,11 @@ export const api = createApi({
         { type: "Tasks", id: "LIST" },
       ],
     }),
+
+    getUsers: builder.query<User[], void>({
+      query: () => "users",
+      providesTags: ["Users"],
+    }),
   }),
 });
 
@@ -293,6 +286,7 @@ export const {
   useCreateCommentMutation,
   useCreateAttachmentMutation,
   useRemoveProjectMemberMutation,
+  useGetUsersQuery,
 } = api;
 
 //

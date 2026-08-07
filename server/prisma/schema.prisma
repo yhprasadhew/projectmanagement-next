@@ -50,9 +50,10 @@ model ProjectTeam {
 
 model User {
   id                  Int              @id @default(autoincrement())
-  cognitoId           String           @unique
+  cognitoId           String?          @unique
   username            String           @unique
   email               String           @unique
+  password            String?
   profilePictureUrl   String?
   role                String           @default("USER")
   position            String?

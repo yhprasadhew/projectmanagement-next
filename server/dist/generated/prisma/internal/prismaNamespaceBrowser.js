@@ -84,6 +84,7 @@ export const UserScalarFieldEnum = {
     cognitoId: 'cognitoId',
     username: 'username',
     email: 'email',
+    password: 'password',
     profilePictureUrl: 'profilePictureUrl',
     role: 'role',
     position: 'position',

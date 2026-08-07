@@ -73,6 +73,7 @@ export declare const UserScalarFieldEnum: {
     readonly cognitoId: "cognitoId";
     readonly username: "username";
     readonly email: "email";
+    readonly password: "password";
     readonly profilePictureUrl: "profilePictureUrl";
     readonly role: "role";
     readonly position: "position";

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { 
   useGetProjectMembersQuery, 
   useAddProjectMemberMutation,
-  useRemoveProjectMemberMutation
+  useRemoveProjectMemberMutation,
+  useGetUsersQuery
 } from "@/state/api";
 import { Loader2, Plus, Mail, User, Briefcase, X, UserCheck, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -28,11 +29,35 @@ export default function ProjectMembersView({ projectId }: Props) {
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [addMode, setAddMode] = useState<"select" | "invite">("select");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [position, setPosition] = useState("Developer");
+  const [selectedUserId, setSelectedUserId] = useState("");
   const [isLeader, setIsLeader] = useState(false);
   const [message, setMessage] = useState("");
+
+  const { data: allUsers, isLoading: allUsersLoading } = useGetUsersQuery();
+
+  const nonMembers = React.useMemo(() => {
+    if (!allUsers) return [];
+    if (!members) return allUsers;
+    const memberIds = new Set(members.map((m) => m.id));
+    return allUsers.filter((u) => u.id !== undefined && !memberIds.has(u.id));
+  }, [allUsers, members]);
+
+  const handleSelectUser = (userIdStr: string) => {
+    const selected = allUsers?.find((u) => u.id?.toString() === userIdStr);
+    if (selected) {
+      setEmail(selected.email);
+      setName(selected.username);
+      setPosition(selected.position || "Developer");
+    } else {
+      setEmail("");
+      setName("");
+      setPosition("Developer");
+    }
+  };
 
   useEffect(() => {
     const savedUser = localStorage.getItem("authUser");
@@ -62,6 +87,7 @@ export default function ProjectMembersView({ projectId }: Props) {
       setEmail("");
       setName("");
       setPosition("Developer");
+      setSelectedUserId("");
       
       setTimeout(() => {
         setIsModalOpen(false);
@@ -201,53 +227,144 @@ export default function ProjectMembersView({ projectId }: Props) {
               </div>
             )}
 
+            <div className="flex gap-2 mb-6 border-b border-gray-100 pb-3 dark:border-stroke-dark">
+              <button
+                type="button"
+                onClick={() => {
+                  setAddMode("select");
+                  setEmail("");
+                  setName("");
+                  setPosition("Developer");
+                  setSelectedUserId("");
+                }}
+                className={cn(
+                  "flex-1 py-1.5 text-xs font-semibold rounded-lg border transition-all",
+                  addMode === "select"
+                    ? "bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-950/20 dark:border-blue-900/30 dark:text-blue-400"
+                    : "border-transparent text-gray-500 hover:text-gray-750 dark:text-gray-400 dark:hover:text-gray-300"
+                )}
+              >
+                Choose Existing User
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setAddMode("invite");
+                  setEmail("");
+                  setName("");
+                  setPosition("Developer");
+                  setSelectedUserId("");
+                }}
+                className={cn(
+                  "flex-1 py-1.5 text-xs font-semibold rounded-lg border transition-all",
+                  addMode === "invite"
+                    ? "bg-blue-50 border-blue-200 text-blue-600 dark:bg-blue-950/20 dark:border-blue-900/30 dark:text-blue-400"
+                    : "border-transparent text-gray-550 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-350"
+                )}
+              >
+                Invite New via Email
+              </button>
+            </div>
+
             <form onSubmit={handleAddMember} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Member Name</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-2.5 h-4.5 w-4.5 text-gray-400" />
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Alice Jones"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500"
-                  />
-                </div>
-              </div>
+              {addMode === "select" ? (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-550 dark:text-gray-400 mb-1.5">Select System User</label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-2.5 h-4.5 w-4.5 text-gray-455 dark:text-gray-500" />
+                      {allUsersLoading ? (
+                        <div className="w-full rounded-xl border border-gray-250/70 bg-gray-50 pl-10 pr-4 py-2.5 text-sm text-gray-500 dark:border-stroke-dark dark:bg-dark-tertiary">
+                          Loading users...
+                        </div>
+                      ) : nonMembers && nonMembers.length > 0 ? (
+                        <select
+                          required
+                          value={selectedUserId}
+                          onChange={(e) => {
+                            setSelectedUserId(e.target.value);
+                            handleSelectUser(e.target.value);
+                          }}
+                          className="w-full rounded-xl border border-gray-250/70 bg-white pl-10 pr-10 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500 appearance-none cursor-pointer text-gray-900 dark:text-white"
+                        >
+                          <option value="">-- Choose a developer/designer --</option>
+                          {nonMembers.map((u) => (
+                            <option key={u.id} value={u.id?.toString()}>
+                              {u.username} ({u.position || "Developer"})
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <div className="w-full rounded-xl border border-gray-250/70 bg-gray-50 pl-10 pr-4 py-2.5 text-sm text-red-500 dark:border-stroke-dark dark:bg-dark-tertiary font-medium">
+                          All system users are already members of this project.
+                        </div>
+                      )}
+                    </div>
+                  </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-4.5 w-4.5 text-gray-400" />
-                  <input
-                    type="email"
-                    required
-                    placeholder="alicejones@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500"
-                  />
-                </div>
-              </div>
+                  {email && (
+                    <div className="rounded-xl border border-gray-155 bg-gray-50/60 p-4 space-y-2 dark:border-stroke-dark/40 dark:bg-dark-tertiary/40">
+                      <div className="flex justify-between text-xs">
+                        <span className="font-semibold text-gray-450 dark:text-gray-550">Email:</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-350">{email}</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="font-semibold text-gray-450 dark:text-gray-555">Role:</span>
+                        <span className="font-medium text-gray-700 dark:text-gray-350">{position}</span>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-555 dark:text-gray-400 mb-1.5">Member Name</label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-2.5 h-4.5 w-4.5 text-gray-400" />
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Alice Jones"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500 text-gray-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5">Project Role / Position</label>
-                <div className="relative">
-                  <Briefcase className="absolute left-3 top-2.5 h-4.5 w-4.5 text-gray-400" />
-                  <select
-                    value={position}
-                    onChange={(e) => setPosition(e.target.value)}
-                    className="w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500 appearance-none cursor-pointer"
-                  >
-                    <option value="Developer">Developer</option>
-                    <option value="Designer">Designer</option>
-                    <option value="Analyst">Analyst</option>
-                    <option value="Project Manager">Project Manager</option>
-                  </select>
-                </div>
-              </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-555 dark:text-gray-400 mb-1.5">Email Address</label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-2.5 h-4.5 w-4.5 text-gray-450 dark:text-gray-500" />
+                      <input
+                        type="email"
+                        required
+                        placeholder="alicejones@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full rounded-xl border border-gray-250/70 bg-white pl-10 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500 text-gray-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-555 dark:text-gray-400 mb-1.5">Project Role / Position</label>
+                    <div className="relative">
+                      <Briefcase className="absolute left-3 top-2.5 h-4.5 w-4.5 text-gray-450 dark:text-gray-500" />
+                      <select
+                        value={position}
+                        onChange={(e) => setPosition(e.target.value)}
+                        className="w-full rounded-xl border border-gray-250/70 bg-white pl-10 pr-4 py-2.5 text-sm outline-none transition-all focus:border-blue-500 dark:border-stroke-dark dark:bg-dark-tertiary dark:focus:border-blue-500 appearance-none cursor-pointer text-gray-900 dark:text-white"
+                      >
+                        <option value="Developer">Developer</option>
+                        <option value="Designer">Designer</option>
+                        <option value="Analyst">Analyst</option>
+                        <option value="Project Manager">Project Manager</option>
+                      </select>
+                    </div>
+                  </div>
+                </>
+              )}
 
               <div className="flex gap-3 pt-3">
                 <button

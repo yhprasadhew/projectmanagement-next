@@ -14,35 +14,21 @@ const Navbar = () => {
   useEffect(() => {
     setIsMounted(true);
 
-    const checkUser = async () => {
+    const checkUser = () => {
       const savedUser = localStorage.getItem("authUser");
       if (savedUser) {
         try {
           const parsed = JSON.parse(savedUser);
           if (parsed && parsed.username) {
             setUsername(parsed.username);
-            return;
           }
         } catch (e) {}
-      }
-
-      try {
-        const { getCurrentUser, fetchUserAttributes } = await import("aws-amplify/auth");
-        const cognitoUser = await getCurrentUser();
-        const attributes = await fetchUserAttributes();
-        setUsername(attributes.name || cognitoUser.username);
-      } catch (e) {
-        // Fallback
       }
     };
     checkUser();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      const { signOut } = await import("aws-amplify/auth");
-      await signOut();
-    } catch (e) {}
+  const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("authUser");
     window.location.reload();

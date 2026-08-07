@@ -5,6 +5,7 @@ import pg from "pg";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+import bcrypt from "bcryptjs";
 const pool = new pg.Pool({ connectionString: process.env.DIRECT_DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
@@ -61,6 +62,7 @@ async function main() {
     // 3. Seed User
     const userFilePath = path.join(dataDirectory, "user.json");
     const userData = JSON.parse(fs.readFileSync(userFilePath, "utf-8"));
+    const hashedPassword = await bcrypt.hash("password123", 10);
     for (const user of userData) {
         const email = `${user.username.toLowerCase()}@example.com`;
         const role = ["BobSmith", "EveClark"].includes(user.username)
@@ -71,6 +73,7 @@ async function main() {
                 ...user,
                 email,
                 role,
+                password: hashedPassword,
             },
         });
     }

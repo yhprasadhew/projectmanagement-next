@@ -25,6 +25,7 @@ export type UserMinAggregateOutputType = {
     cognitoId: string | null;
     username: string | null;
     email: string | null;
+    password: string | null;
     profilePictureUrl: string | null;
     role: string | null;
     position: string | null;
@@ -37,6 +38,7 @@ export type UserMaxAggregateOutputType = {
     cognitoId: string | null;
     username: string | null;
     email: string | null;
+    password: string | null;
     profilePictureUrl: string | null;
     role: string | null;
     position: string | null;
@@ -49,6 +51,7 @@ export type UserCountAggregateOutputType = {
     cognitoId: number;
     username: number;
     email: number;
+    password: number;
     profilePictureUrl: number;
     role: number;
     position: number;
@@ -70,6 +73,7 @@ export type UserMinAggregateInputType = {
     cognitoId?: true;
     username?: true;
     email?: true;
+    password?: true;
     profilePictureUrl?: true;
     role?: true;
     position?: true;
@@ -82,6 +86,7 @@ export type UserMaxAggregateInputType = {
     cognitoId?: true;
     username?: true;
     email?: true;
+    password?: true;
     profilePictureUrl?: true;
     role?: true;
     position?: true;
@@ -94,6 +99,7 @@ export type UserCountAggregateInputType = {
     cognitoId?: true;
     username?: true;
     email?: true;
+    password?: true;
     profilePictureUrl?: true;
     role?: true;
     position?: true;
@@ -180,9 +186,10 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 };
 export type UserGroupByOutputType = {
     id: number;
-    cognitoId: string;
+    cognitoId: string | null;
     username: string;
     email: string;
+    password: string | null;
     profilePictureUrl: string | null;
     role: string;
     position: string | null;
@@ -203,9 +210,10 @@ export type UserWhereInput = {
     OR?: Prisma.UserWhereInput[];
     NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     id?: Prisma.IntFilter<"User"> | number;
-    cognitoId?: Prisma.StringFilter<"User"> | string;
+    cognitoId?: Prisma.StringNullableFilter<"User"> | string | null;
     username?: Prisma.StringFilter<"User"> | string;
     email?: Prisma.StringFilter<"User"> | string;
+    password?: Prisma.StringNullableFilter<"User"> | string | null;
     profilePictureUrl?: Prisma.StringNullableFilter<"User"> | string | null;
     role?: Prisma.StringFilter<"User"> | string;
     position?: Prisma.StringNullableFilter<"User"> | string | null;
@@ -224,9 +232,10 @@ export type UserWhereInput = {
 };
 export type UserOrderByWithRelationInput = {
     id?: Prisma.SortOrder;
-    cognitoId?: Prisma.SortOrder;
+    cognitoId?: Prisma.SortOrderInput | Prisma.SortOrder;
     username?: Prisma.SortOrder;
     email?: Prisma.SortOrder;
+    password?: Prisma.SortOrderInput | Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
     role?: Prisma.SortOrder;
     position?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -251,6 +260,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     OR?: Prisma.UserWhereInput[];
     NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
+    password?: Prisma.StringNullableFilter<"User"> | string | null;
     profilePictureUrl?: Prisma.StringNullableFilter<"User"> | string | null;
     role?: Prisma.StringFilter<"User"> | string;
     position?: Prisma.StringNullableFilter<"User"> | string | null;
@@ -269,9 +279,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
 }, "id" | "cognitoId" | "username" | "email">;
 export type UserOrderByWithAggregationInput = {
     id?: Prisma.SortOrder;
-    cognitoId?: Prisma.SortOrder;
+    cognitoId?: Prisma.SortOrderInput | Prisma.SortOrder;
     username?: Prisma.SortOrder;
     email?: Prisma.SortOrder;
+    password?: Prisma.SortOrderInput | Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrderInput | Prisma.SortOrder;
     role?: Prisma.SortOrder;
     position?: Prisma.SortOrderInput | Prisma.SortOrder;
@@ -289,9 +300,10 @@ export type UserScalarWhereWithAggregatesInput = {
     OR?: Prisma.UserScalarWhereWithAggregatesInput[];
     NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[];
     id?: Prisma.IntWithAggregatesFilter<"User"> | number;
-    cognitoId?: Prisma.StringWithAggregatesFilter<"User"> | string;
+    cognitoId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
     username?: Prisma.StringWithAggregatesFilter<"User"> | string;
     email?: Prisma.StringWithAggregatesFilter<"User"> | string;
+    password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
     profilePictureUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
     role?: Prisma.StringWithAggregatesFilter<"User"> | string;
     position?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
@@ -300,9 +312,10 @@ export type UserScalarWhereWithAggregatesInput = {
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
 };
 export type UserCreateInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -320,9 +333,10 @@ export type UserCreateInput = {
 };
 export type UserUncheckedCreateInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -339,9 +353,10 @@ export type UserUncheckedCreateInput = {
     projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutMembersInput;
 };
 export type UserUpdateInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -359,9 +374,10 @@ export type UserUpdateInput = {
 };
 export type UserUncheckedUpdateInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -379,9 +395,10 @@ export type UserUncheckedUpdateInput = {
 };
 export type UserCreateManyInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -390,9 +407,10 @@ export type UserCreateManyInput = {
     updatedAt?: Date | string;
 };
 export type UserUpdateManyMutationInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -401,9 +419,10 @@ export type UserUpdateManyMutationInput = {
 };
 export type UserUncheckedUpdateManyInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -428,6 +447,7 @@ export type UserCountOrderByAggregateInput = {
     cognitoId?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
     email?: Prisma.SortOrder;
+    password?: Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrder;
     role?: Prisma.SortOrder;
     position?: Prisma.SortOrder;
@@ -444,6 +464,7 @@ export type UserMaxOrderByAggregateInput = {
     cognitoId?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
     email?: Prisma.SortOrder;
+    password?: Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrder;
     role?: Prisma.SortOrder;
     position?: Prisma.SortOrder;
@@ -456,6 +477,7 @@ export type UserMinOrderByAggregateInput = {
     cognitoId?: Prisma.SortOrder;
     username?: Prisma.SortOrder;
     email?: Prisma.SortOrder;
+    password?: Prisma.SortOrder;
     profilePictureUrl?: Prisma.SortOrder;
     role?: Prisma.SortOrder;
     position?: Prisma.SortOrder;
@@ -636,9 +658,10 @@ export type UserUpdateOneRequiredWithoutTaskAssignmentsNestedInput = {
     update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTaskAssignmentsInput, Prisma.UserUpdateWithoutTaskAssignmentsInput>, Prisma.UserUncheckedUpdateWithoutTaskAssignmentsInput>;
 };
 export type UserCreateWithoutProductOwnerTeamsInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -655,9 +678,10 @@ export type UserCreateWithoutProductOwnerTeamsInput = {
 };
 export type UserUncheckedCreateWithoutProductOwnerTeamsInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -677,9 +701,10 @@ export type UserCreateOrConnectWithoutProductOwnerTeamsInput = {
     create: Prisma.XOR<Prisma.UserCreateWithoutProductOwnerTeamsInput, Prisma.UserUncheckedCreateWithoutProductOwnerTeamsInput>;
 };
 export type UserCreateWithoutProjectManagerTeamsInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -696,9 +721,10 @@ export type UserCreateWithoutProjectManagerTeamsInput = {
 };
 export type UserUncheckedCreateWithoutProjectManagerTeamsInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -718,9 +744,10 @@ export type UserCreateOrConnectWithoutProjectManagerTeamsInput = {
     create: Prisma.XOR<Prisma.UserCreateWithoutProjectManagerTeamsInput, Prisma.UserUncheckedCreateWithoutProjectManagerTeamsInput>;
 };
 export type UserCreateWithoutTeamInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -737,9 +764,10 @@ export type UserCreateWithoutTeamInput = {
 };
 export type UserUncheckedCreateWithoutTeamInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -772,9 +800,10 @@ export type UserUpdateToOneWithWhereWithoutProductOwnerTeamsInput = {
     data: Prisma.XOR<Prisma.UserUpdateWithoutProductOwnerTeamsInput, Prisma.UserUncheckedUpdateWithoutProductOwnerTeamsInput>;
 };
 export type UserUpdateWithoutProductOwnerTeamsInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -791,9 +820,10 @@ export type UserUpdateWithoutProductOwnerTeamsInput = {
 };
 export type UserUncheckedUpdateWithoutProductOwnerTeamsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -818,9 +848,10 @@ export type UserUpdateToOneWithWhereWithoutProjectManagerTeamsInput = {
     data: Prisma.XOR<Prisma.UserUpdateWithoutProjectManagerTeamsInput, Prisma.UserUncheckedUpdateWithoutProjectManagerTeamsInput>;
 };
 export type UserUpdateWithoutProjectManagerTeamsInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -837,9 +868,10 @@ export type UserUpdateWithoutProjectManagerTeamsInput = {
 };
 export type UserUncheckedUpdateWithoutProjectManagerTeamsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -872,9 +904,10 @@ export type UserScalarWhereInput = {
     OR?: Prisma.UserScalarWhereInput[];
     NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[];
     id?: Prisma.IntFilter<"User"> | number;
-    cognitoId?: Prisma.StringFilter<"User"> | string;
+    cognitoId?: Prisma.StringNullableFilter<"User"> | string | null;
     username?: Prisma.StringFilter<"User"> | string;
     email?: Prisma.StringFilter<"User"> | string;
+    password?: Prisma.StringNullableFilter<"User"> | string | null;
     profilePictureUrl?: Prisma.StringNullableFilter<"User"> | string | null;
     role?: Prisma.StringFilter<"User"> | string;
     position?: Prisma.StringNullableFilter<"User"> | string | null;
@@ -883,9 +916,10 @@ export type UserScalarWhereInput = {
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
 };
 export type UserCreateWithoutProjectsInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -902,9 +936,10 @@ export type UserCreateWithoutProjectsInput = {
 };
 export type UserUncheckedCreateWithoutProjectsInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -937,9 +972,10 @@ export type UserUpdateManyWithWhereWithoutProjectsInput = {
     data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutProjectsInput>;
 };
 export type UserCreateWithoutAuthoredTasksInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -956,9 +992,10 @@ export type UserCreateWithoutAuthoredTasksInput = {
 };
 export type UserUncheckedCreateWithoutAuthoredTasksInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -978,9 +1015,10 @@ export type UserCreateOrConnectWithoutAuthoredTasksInput = {
     create: Prisma.XOR<Prisma.UserCreateWithoutAuthoredTasksInput, Prisma.UserUncheckedCreateWithoutAuthoredTasksInput>;
 };
 export type UserCreateWithoutAssignedTasksInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -997,9 +1035,10 @@ export type UserCreateWithoutAssignedTasksInput = {
 };
 export type UserUncheckedCreateWithoutAssignedTasksInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -1028,9 +1067,10 @@ export type UserUpdateToOneWithWhereWithoutAuthoredTasksInput = {
     data: Prisma.XOR<Prisma.UserUpdateWithoutAuthoredTasksInput, Prisma.UserUncheckedUpdateWithoutAuthoredTasksInput>;
 };
 export type UserUpdateWithoutAuthoredTasksInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1047,9 +1087,10 @@ export type UserUpdateWithoutAuthoredTasksInput = {
 };
 export type UserUncheckedUpdateWithoutAuthoredTasksInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1074,9 +1115,10 @@ export type UserUpdateToOneWithWhereWithoutAssignedTasksInput = {
     data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTasksInput, Prisma.UserUncheckedUpdateWithoutAssignedTasksInput>;
 };
 export type UserUpdateWithoutAssignedTasksInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1093,9 +1135,10 @@ export type UserUpdateWithoutAssignedTasksInput = {
 };
 export type UserUncheckedUpdateWithoutAssignedTasksInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1111,9 +1154,10 @@ export type UserUncheckedUpdateWithoutAssignedTasksInput = {
     projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserCreateWithoutAttachmentsInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -1130,9 +1174,10 @@ export type UserCreateWithoutAttachmentsInput = {
 };
 export type UserUncheckedCreateWithoutAttachmentsInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -1161,9 +1206,10 @@ export type UserUpdateToOneWithWhereWithoutAttachmentsInput = {
     data: Prisma.XOR<Prisma.UserUpdateWithoutAttachmentsInput, Prisma.UserUncheckedUpdateWithoutAttachmentsInput>;
 };
 export type UserUpdateWithoutAttachmentsInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1180,9 +1226,10 @@ export type UserUpdateWithoutAttachmentsInput = {
 };
 export type UserUncheckedUpdateWithoutAttachmentsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1198,9 +1245,10 @@ export type UserUncheckedUpdateWithoutAttachmentsInput = {
     projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserCreateWithoutCommentsInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -1217,9 +1265,10 @@ export type UserCreateWithoutCommentsInput = {
 };
 export type UserUncheckedCreateWithoutCommentsInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -1248,9 +1297,10 @@ export type UserUpdateToOneWithWhereWithoutCommentsInput = {
     data: Prisma.XOR<Prisma.UserUpdateWithoutCommentsInput, Prisma.UserUncheckedUpdateWithoutCommentsInput>;
 };
 export type UserUpdateWithoutCommentsInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1267,9 +1317,10 @@ export type UserUpdateWithoutCommentsInput = {
 };
 export type UserUncheckedUpdateWithoutCommentsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1285,9 +1336,10 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
     projects?: Prisma.ProjectUncheckedUpdateManyWithoutMembersNestedInput;
 };
 export type UserCreateWithoutTaskAssignmentsInput = {
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -1304,9 +1356,10 @@ export type UserCreateWithoutTaskAssignmentsInput = {
 };
 export type UserUncheckedCreateWithoutTaskAssignmentsInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -1335,9 +1388,10 @@ export type UserUpdateToOneWithWhereWithoutTaskAssignmentsInput = {
     data: Prisma.XOR<Prisma.UserUpdateWithoutTaskAssignmentsInput, Prisma.UserUncheckedUpdateWithoutTaskAssignmentsInput>;
 };
 export type UserUpdateWithoutTaskAssignmentsInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1354,9 +1408,10 @@ export type UserUpdateWithoutTaskAssignmentsInput = {
 };
 export type UserUncheckedUpdateWithoutTaskAssignmentsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1373,9 +1428,10 @@ export type UserUncheckedUpdateWithoutTaskAssignmentsInput = {
 };
 export type UserCreateManyTeamInput = {
     id?: number;
-    cognitoId: string;
+    cognitoId?: string | null;
     username: string;
     email: string;
+    password?: string | null;
     profilePictureUrl?: string | null;
     role?: string;
     position?: string | null;
@@ -1383,9 +1439,10 @@ export type UserCreateManyTeamInput = {
     updatedAt?: Date | string;
 };
 export type UserUpdateWithoutTeamInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1402,9 +1459,10 @@ export type UserUpdateWithoutTeamInput = {
 };
 export type UserUncheckedUpdateWithoutTeamInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1421,9 +1479,10 @@ export type UserUncheckedUpdateWithoutTeamInput = {
 };
 export type UserUncheckedUpdateManyWithoutTeamInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1431,9 +1490,10 @@ export type UserUncheckedUpdateManyWithoutTeamInput = {
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
 export type UserUpdateWithoutProjectsInput = {
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1450,9 +1510,10 @@ export type UserUpdateWithoutProjectsInput = {
 };
 export type UserUncheckedUpdateWithoutProjectsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1469,9 +1530,10 @@ export type UserUncheckedUpdateWithoutProjectsInput = {
 };
 export type UserUncheckedUpdateManyWithoutProjectsInput = {
     id?: Prisma.IntFieldUpdateOperationsInput | number;
-    cognitoId?: Prisma.StringFieldUpdateOperationsInput | string;
+    cognitoId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     username?: Prisma.StringFieldUpdateOperationsInput | string;
     email?: Prisma.StringFieldUpdateOperationsInput | string;
+    password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     profilePictureUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
     role?: Prisma.StringFieldUpdateOperationsInput | string;
     position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
@@ -1564,6 +1626,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     cognitoId?: boolean;
     username?: boolean;
     email?: boolean;
+    password?: boolean;
     profilePictureUrl?: boolean;
     role?: boolean;
     position?: boolean;
@@ -1586,6 +1649,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     cognitoId?: boolean;
     username?: boolean;
     email?: boolean;
+    password?: boolean;
     profilePictureUrl?: boolean;
     role?: boolean;
     position?: boolean;
@@ -1599,6 +1663,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     cognitoId?: boolean;
     username?: boolean;
     email?: boolean;
+    password?: boolean;
     profilePictureUrl?: boolean;
     role?: boolean;
     position?: boolean;
@@ -1612,6 +1677,7 @@ export type UserSelectScalar = {
     cognitoId?: boolean;
     username?: boolean;
     email?: boolean;
+    password?: boolean;
     profilePictureUrl?: boolean;
     role?: boolean;
     position?: boolean;
@@ -1619,7 +1685,7 @@ export type UserSelectScalar = {
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cognitoId" | "username" | "email" | "profilePictureUrl" | "role" | "position" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>;
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "cognitoId" | "username" | "email" | "password" | "profilePictureUrl" | "role" | "position" | "teamId" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>;
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     team?: boolean | Prisma.User$teamArgs<ExtArgs>;
     authoredTasks?: boolean | Prisma.User$authoredTasksArgs<ExtArgs>;
@@ -1653,9 +1719,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     };
     scalars: runtime.Types.Extensions.GetPayloadResult<{
         id: number;
-        cognitoId: string;
+        cognitoId: string | null;
         username: string;
         email: string;
+        password: string | null;
         profilePictureUrl: string | null;
         role: string;
         position: string | null;
@@ -2029,6 +2096,7 @@ export interface UserFieldRefs {
     readonly cognitoId: Prisma.FieldRef<"User", 'String'>;
     readonly username: Prisma.FieldRef<"User", 'String'>;
     readonly email: Prisma.FieldRef<"User", 'String'>;
+    readonly password: Prisma.FieldRef<"User", 'String'>;
     readonly profilePictureUrl: Prisma.FieldRef<"User", 'String'>;
     readonly role: Prisma.FieldRef<"User", 'String'>;
     readonly position: Prisma.FieldRef<"User", 'String'>;

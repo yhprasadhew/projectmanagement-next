@@ -177,6 +177,7 @@ export const addProjectMember = async (req, res) => {
                     position: position || "Developer",
                 },
             });
+            console.log(`\n========================================================\n[EMAIL SIMULATOR] Invitation email sent to: ${email}\nAction required: Set password on the login screen to activate account.\n========================================================\n`);
         }
         else if (position) {
             // Update position for existing user

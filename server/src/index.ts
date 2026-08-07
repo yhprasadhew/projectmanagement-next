@@ -8,6 +8,7 @@ import morgan from "morgan";
 import projectRoutes from "./routes/projectRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import { authenticateCognitoToken } from "./middleware/cognitoAuth.js";
 
 dotenv.config();
@@ -28,11 +29,13 @@ app.get("/", (req, res) => {
   res.send("hello this home route");
 });
 
-app.use("/auth", authenticateCognitoToken, authRoutes);
+app.use("/auth", authRoutes);
 
 app.use("/projects", authenticateCognitoToken, projectRoutes);
 
 app.use("/tasks", authenticateCognitoToken, taskRoutes);
+
+app.use("/users", authenticateCognitoToken, userRoutes);
 
 
 const port = process.env.PORT || 3000;

@@ -5,28 +5,6 @@ import Sidebar from "../components/sidebar";
 import Navbar from "../components/navbar";
 import StoreProvider, { useAppSelector } from "./redux";
 import LoginView from "@/components/auth/LoginView";
-import { Amplify } from "aws-amplify";
-
-// Configure AWS Amplify Cognito dynamically
-const isCognitoConfigured = !!(
-  process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID &&
-  process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID
-);
-
-if (isCognitoConfigured) {
-  try {
-    Amplify.configure({
-      Auth: {
-        Cognito: {
-          userPoolId: process.env.NEXT_PUBLIC_COGNITO_USER_POOL_ID!,
-          userPoolClientId: process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID!,
-        },
-      },
-    });
-  } catch (error) {
-    console.error("Amplify configuration failed:", error);
-  }
-}
 
 const DashboardLayout = ({
   children,
@@ -46,30 +24,37 @@ const DashboardLayout = ({
     setIsMounted(true);
 
     const checkAuth = async () => {
-      if (isCognitoConfigured) {
-        try {
-          const { getCurrentUser, fetchUserAttributes } = await import("aws-amplify/auth");
-          const cognitoUser = await getCurrentUser();
-          const attributes = await fetchUserAttributes();
-          
-          setUser({
-            username: attributes.name || cognitoUser.username,
-            email: attributes.email || "",
-            role: "USER", // Default role
-          });
-          setIsAuthenticated(true);
-          return;
-        } catch (e) {
-          // Not logged in via Cognito
-        }
-      }
-
-      // Local storage fallback for mock authentication
       const token = localStorage.getItem("authToken");
       const savedUser = localStorage.getItem("authUser");
+      
       if (token && savedUser) {
-        setUser(JSON.parse(savedUser));
-        setIsAuthenticated(true);
+        try {
+          setUser(JSON.parse(savedUser));
+          setIsAuthenticated(true);
+          
+          // Verify token validity against the backend
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/me`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (response.ok) {
+            const userData = await response.json();
+            setUser(userData);
+            localStorage.setItem("authUser", JSON.stringify(userData));
+          } else if (response.status === 401 || response.status === 403) {
+            // Invalid or expired token
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("authUser");
+            setUser(null);
+            setIsAuthenticated(false);
+          }
+        } catch (e) {
+          console.error("Auth check failed:", e);
+        }
       }
     };
 
@@ -91,7 +76,7 @@ const DashboardLayout = ({
   if (!isAuthenticated) {
     return (
       <LoginView
-        isCognitoConfigured={isCognitoConfigured}
+        isCognitoConfigured={false}
         onLoginSuccess={(token, userDetails) => {
           setUser(userDetails);
           setIsAuthenticated(true);

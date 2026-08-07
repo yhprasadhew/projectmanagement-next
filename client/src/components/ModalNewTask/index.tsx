@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X, Loader2 } from "lucide-react";
-import { useCreateTaskMutation, useGetProjectMembersQuery } from "@/state/api";
+import { useCreateTaskMutation, useGetUsersQuery } from "@/state/api";
 
 type Props = {
   isOpen: boolean;
@@ -10,7 +10,7 @@ type Props = {
 
 const ModalNewTask = ({ isOpen, onClose, projectId }: Props) => {
   const [createTask, { isLoading }] = useCreateTaskMutation();
-  const { data: members, isLoading: membersLoading } = useGetProjectMembersQuery(projectId);
+  const { data: users, isLoading: usersLoading } = useGetUsersQuery();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -38,10 +38,10 @@ const ModalNewTask = ({ isOpen, onClose, projectId }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (members && members.length > 0 && !assignedUserId) {
-      setAssignedUserId(members[0].id?.toString() || "");
+    if (users && users.length > 0 && !assignedUserId) {
+      setAssignedUserId(users[0].id?.toString() || "");
     }
-  }, [members, assignedUserId]);
+  }, [users, assignedUserId]);
 
   if (!isOpen) return null;
 
@@ -70,7 +70,7 @@ const ModalNewTask = ({ isOpen, onClose, projectId }: Props) => {
       setTags("");
       setStartDate("");
       setDueDate("");
-      setAssignedUserId(members?.[0]?.id?.toString() || "");
+      setAssignedUserId(users?.[0]?.id?.toString() || "");
       
       onClose();
     } catch (error) {
@@ -203,24 +203,24 @@ const ModalNewTask = ({ isOpen, onClose, projectId }: Props) => {
               <label className="block text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1.5">
                 Assignee *
               </label>
-              {membersLoading ? (
-                <div className="flex items-center h-9 text-xs text-gray-450">Loading members...</div>
-              ) : members && members.length > 0 ? (
+              {usersLoading ? (
+                <div className="flex items-center h-9 text-xs text-gray-450">Loading users...</div>
+              ) : users && users.length > 0 ? (
                 <select
                   required
                   value={assignedUserId}
                   onChange={(e) => setAssignedUserId(e.target.value)}
                   className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-700 outline-none transition-all focus:border-blue-500 focus:bg-white dark:border-stroke-dark dark:bg-dark-tertiary dark:text-gray-200 dark:focus:bg-dark-bg cursor-pointer"
                 >
-                  {members.map((member) => (
-                    <option key={member.id} value={member.id?.toString()}>
-                      {member.username} ({member.position || "Developer"})
+                  {users.map((user) => (
+                    <option key={user.id} value={user.id?.toString()}>
+                      {user.username} ({user.position || "Developer"})
                     </option>
                   ))}
                 </select>
               ) : (
                 <div className="text-xs text-red-500 font-semibold h-9 flex items-center">
-                  Please add members to this project first
+                  No users available in the system
                 </div>
               )}
             </div>
