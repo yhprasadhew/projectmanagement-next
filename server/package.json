@@ -6,7 +6,7 @@
   "main": "dist/src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist && tsc",
+    "build": "npx prisma generate && rimraf dist && tsc",
     "dev": "concurrently \"tsx watch src/index.ts\" \"tsc -w\"",
     "start": "npm run build && node dist/src/index.js",
     "seed": "tsx prisma/seed.ts"
