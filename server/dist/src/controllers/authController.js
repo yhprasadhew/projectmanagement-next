@@ -8,8 +8,8 @@ export const login = async (req, res) => {
         const user = await prisma.user.findFirst({
             where: {
                 OR: [
-                    { email: usernameOrEmail },
-                    { username: usernameOrEmail },
+                    { email: { equals: usernameOrEmail, mode: "insensitive" } },
+                    { username: { equals: usernameOrEmail, mode: "insensitive" } },
                 ]
             }
         });
