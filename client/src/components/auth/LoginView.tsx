@@ -191,15 +191,15 @@ export default function LoginView({ onLoginSuccess }: Props) {
                 <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
                   Username or Email
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500" />
+                <div className="relative group">
+                  <Mail className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors" />
                   <input
                     type="text"
                     required
                     placeholder="e.g. BobSmith"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-white pl-10.5 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                    className="w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
                   />
                 </div>
               </div>
@@ -208,15 +208,15 @@ export default function LoginView({ onLoginSuccess }: Props) {
                 <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
                   Password
                 </label>
-                <div className="relative">
-                  <Key className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500" />
+                <div className="relative group">
+                  <Key className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors" />
                   <input
                     type="password"
                     required
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-white pl-10.5 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                    className="w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
                   />
                 </div>
               </div>
@@ -249,15 +249,15 @@ export default function LoginView({ onLoginSuccess }: Props) {
                 <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
                   Email Address
                 </label>
-                <div className="relative">
-                  <Mail className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500" />
+                <div className="relative group">
+                  <Mail className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors" />
                   <input
                     type="email"
                     required
                     placeholder="your.email@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-white pl-10.5 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                    className="w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
                   />
                 </div>
               </div>
@@ -266,15 +266,15 @@ export default function LoginView({ onLoginSuccess }: Props) {
                 <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
                   New Password
                 </label>
-                <div className="relative">
-                  <Key className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500" />
+                <div className="relative group">
+                  <Key className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors" />
                   <input
                     type="password"
                     required
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-white pl-10.5 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                    className="w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
                   />
                 </div>
               </div>
@@ -283,15 +283,15 @@ export default function LoginView({ onLoginSuccess }: Props) {
                 <label className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wider">
                   Confirm New Password
                 </label>
-                <div className="relative">
-                  <Key className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500" />
+                <div className="relative group">
+                  <Key className="absolute left-3.5 top-3 h-4.5 w-4.5 text-slate-400 dark:text-slate-500 group-focus-within:text-indigo-600 dark:group-focus-within:text-indigo-400 transition-colors" />
                   <input
                     type="password"
                     required
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full rounded-xl border border-slate-200 bg-white pl-10.5 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
+                    className="w-full rounded-xl border border-slate-200 bg-white pl-11 pr-4 py-2.5 text-sm text-slate-900 outline-none transition-all focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 dark:border-slate-800 dark:bg-slate-900/40 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500"
                   />
                 </div>
               </div>
